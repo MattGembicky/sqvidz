@@ -8,7 +8,7 @@ app.get('/',function(req, res) {
 });
 app.use('/public',express.static(__dirname + '/public'));
 
-serv.listen(8080 || process.env.PORT, function (){
+serv.listen(process.env.PORT || 8080, function (){
   console.log(`Running on port: ${serv.address().port}`);
 });									//seting epress server and port
 console.log('2/  Server without problem');
