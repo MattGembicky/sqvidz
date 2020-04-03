@@ -4,7 +4,7 @@ var app = express();
 var serv = require('http').Server(app);
 
 app.get('/',function(req, res){
-  res.sendFile(__dirname + '/public/index.html');
+  res.redirect(__dirname + '/public/index.html');
 });
 app.use('/public',express.static(__dirname + '/public'));
 
