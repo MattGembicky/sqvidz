@@ -51,7 +51,7 @@ var Player = function(id,username){		//player data
 		self.keyLeft = false;
 		self.keyUp =false;;
 		self.keyDown =false;
-		self.speed = 5;
+		self.speed = 10;
 		self.score = 0;
 		self.shot = false;
 		self.slaped = 0;
@@ -146,7 +146,7 @@ var Player = function(id,username){		//player data
 		if(self.purpose===0)
 			self.speed=0;
 		else if(self.shot==false)
-			self.speed=5;
+			self.speed=10;
 
 		if(self.slaped>0&&self.purpose===-1&&self.shot==false)
 		{
@@ -156,7 +156,7 @@ var Player = function(id,username){		//player data
 			else
 				self.speed=6;
 		}else if(self.purpose===-1&&self.shot==false){
-			self.speed = 5;
+			self.speed = 10;
 
 		}
 	}
@@ -176,22 +176,22 @@ var Player = function(id,username){		//player data
 		}
 		if(self.x<BORDERvalue){
 			self.shot=false;
-			self.speed=5;
+			self.speed=10;
 			self.x=BORDERvalue;
 		}
 		if(self.x>(WIDTH-BORDERvalue)){
 			self.shot=false;
-			self.speed=5;
+			self.speed=10;
 			self.x=WIDTH-BORDERvalue;
 		}
 		if(self.y<BORDERvalue){
 			self.shot=false;
-			self.speed=5;
+			self.speed=10;
 			self.y=BORDERvalue;
 		}
 		if(self.y>(HEIGHT-BORDERvalue)){
 			self.shot=false;
-			self.speed=5;
+			self.speed=10;
 			self.y=HEIGHT-BORDERvalue;
 		}
 	}
