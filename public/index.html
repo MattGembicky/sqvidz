@@ -120,16 +120,18 @@
 		        self.draw = function(){
 		        	var width = 64;
 		        	var height = 64;
-		        	ctx.font = '16px Arial'
-		        	ctx.fillText(self.name,self.x-16,self.y-28)
+		        	ctx.font = '16px Arial';
+		        	ctx.fillText(self.name,self.x-16,self.y-28);
 		        	/*var widthOfP = Img.player.width*2;
 		        	var heightOfP = Img.player.height*2;*/
 		        	ctx.drawImage(Img.player,
 		        		0,0,Img.player.width,Img.player.height,
 		        		self.x-width/2,self.y-height/2,width,height);
-		        	ctx.drawImage(Img.player,
-		        		0,0,Img.player.width/2,Img.player.height/2,
-		        		self.x-width/2,self.y-height/2,width/2,height/2);
+		        	ctx.fillText('.',self.x,self.y);
+		        	ctx.fillText('.',self.x-64,self.y);
+		        	ctx.fillText('.',self.x+64,self.y);
+		        	ctx.fillText('.',self.x,self.y+64);
+		        	ctx.fillText('.',self.x,self.y-64);
 		        }
 
 		        Player.list[self.id] = self;

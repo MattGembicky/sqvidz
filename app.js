@@ -16,12 +16,15 @@ console.log('2/  Server without problem');
 var SocketList = {};
 const WIDTH = 960;
 const HEIGHT = 960;
-const BORDERvalue = 20;
+const BORDERvalue = 24;
+const GAMESPEED = 60;		//snimku za sekundu
 
 var Entity = function(){	//zakladni objekt sveta
 	var self = {			//s pozici x,y,rychlostmi a id
-		x: Math.floor(Math.random() * (WIDTH-128))+64,
-		y: Math.floor(Math.random() * (HEIGHT-128))+64,
+		//x: Math.floor(Math.random() * (WIDTH-128))+128,
+		//y: Math.floor(Math.random() * (HEIGHT-128))+128,
+		x:250,
+		y:250,
 		speedX:10,
 		speedY:10,
 		id:"",
@@ -50,13 +53,20 @@ var Player = function(id,username){		//player data
 		self.keyDown =false;
 		self.speed = 5;
 		self.score = 0;
+		self.shot = false;
+		self.slaped = 0;
+		self.purpose = -1;
+		self.friend = 0;
+		self.angle = 0;
 
-		if(self.name==='aaa')
+		if(self.name==='aaa')		//smazat
 		    self.score=1;
 		if(self.name==='bbb')
 		    self.score=2;
 		if(self.name==='ccc')
 		    self.score=3;
+		if(self.name==='a')
+			self.shot=true;
 
 	var super_update = self.update;
 	self.update = function(){
@@ -65,30 +75,132 @@ var Player = function(id,username){		//player data
 
 		for(var i in Player.list){
 			var other = Player.list[i];
-			if(self.getDistanceTo(other)<28&&other.id !== self.id && other.ready == true){//kdyz vzdalenost a jine id a ready oba/*&& self.ready === true*/
-				socket.on('MsgToServer', function(msg){
-					for(var i in SocketList){
-						SocketList[i].emit('addTextMsg',"couple");
+			var distance = self.getDistanceTo(other);
+			if(distance<64&&other.id !== self.id){//kdyz vzdalenost a jine id 
+				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){//zjisteni zda uz nemaji ukol > priradi/*&& self.ready === true*/
+					var rng = Math.floor(Math.random() * 1)+0;
+					self.purpose = rng;
+					if(rng===0){
+						other.purpose = 1;
+						other.friend = self.id;
 					}
-				});
+					else{
+						other.purpose = 0;
+						self.friend = other.id;
+					}
+				}
 			}
+			if(distance<32&&other.id !== self.id&&other.shot==true&&self.slaped===0){
+				other.score++;
+				for(var i in Player.list){
+					var another = Player.list[i];
+					if(other.friend==another.id)
+						another.score++;
+					other.friend=undefined;
+				}
+				console.log(self.name+" slaped");
+				self.slaped=GAMESPEED*3;
+			}
+		}
+
+		if(self.purpose===1){
+			for(var i in Player.list){
+				var other = Player.list[i];
+				if(other.id==self.friend)
+					var matcher = Player.list[i];
+			}
+			var distance = self.getDistanceTo(matcher);
+			self.angle+=0.07+(64-distance)/500;
+			self.x = matcher.x + Math.cos(self.angle)*distance;
+			self.y = matcher.y + Math.sin(self.angle)*distance;	
+			if(self.angle>2*Math.PI){
+				self.angle=0;
+			}
+		}
+
+		for(var i in Player.list){
+			var other = Player.list[i];
+			if(other.id==self.friend){
+				if(self.getDistanceTo(other)>64){
+					self.purpose=-1;
+					other.purpose=-1;
+					self.friend=undefined;
+					other.friend=undefined;
+				}
+				if(self.ready==false&&other.ready==false){
+					self.purpose=-1;
+					self.shot=true;
+					self.speed=30;
+					other.purpose=-1;
+					other.friend=undefined;
+				}
+			}			
+		}
+
+
+		if(self.shot){
+			self.updateShot(self.angle);
+		}
+
+
+		if(self.purpose===0)
+			self.speed=0;
+		else if(self.shot==false)
+			self.speed=5;
+
+		if(self.slaped>0&&self.purpose===-1&&self.shot==false)
+		{
+			self.slaped--;
+			if(self.slaped>GAMESPEED)
+				self.speed=0;
+			else
+				self.speed=6;
+		}else if(self.purpose===-1&&self.shot==false){
+			self.speed = 5;
+
 		}
 	}
 
 	self.updateSpeed = function(){	//pohyb a zaroven border
-		if(self.keyRight&&self.x<(WIDTH-BORDERvalue))
-			self.speedX = self.speed;
-		else if(self.keyLeft&&self.x>(0+BORDERvalue))
-			self.speedX = -self.speed;
-		else
+		if(self.shot==false){
 			self.speedX = 0;
-
-		if(self.keyUp&&self.y>(0+BORDERvalue))
-			self.speedY = -self.speed;
-		else if(self.keyDown&&self.y<(HEIGHT-BORDERvalue))
-			self.speedY = self.speed;
-		else
+			if(self.keyRight)
+				self.speedX = self.speed;
+			if(self.keyLeft)
+				self.speedX = -self.speed;
 			self.speedY = 0;
+			if(self.keyUp)
+				self.speedY = -self.speed;
+			if(self.keyDown)
+				self.speedY = self.speed;
+		}
+		if(self.x<BORDERvalue){
+			self.shot=false;
+			self.speed=5;
+			self.x=BORDERvalue;
+		}
+		if(self.x>(WIDTH-BORDERvalue)){
+			self.shot=false;
+			self.speed=5;
+			self.x=WIDTH-BORDERvalue;
+		}
+		if(self.y<BORDERvalue){
+			self.shot=false;
+			self.speed=5;
+			self.y=BORDERvalue;
+		}
+		if(self.y>(HEIGHT-BORDERvalue)){
+			self.shot=false;
+			self.speed=5;
+			self.y=HEIGHT-BORDERvalue;
+		}
+	}
+	self.updateShot = function(angle){
+		angle+=Math.PI/2;
+		if(self.shot){
+			self.x += Math.cos(angle)*20;
+			self.y += Math.sin(angle)*20;
+		}
 	}
 	self.getInitPack = function(){
 		return{
@@ -207,4 +319,4 @@ setInterval(function(){		//game Loop
 	}
 	initPack.player = [];
 	removePack.player = [];
-},1000/60);	//snimku za sekundu
+},1000/GAMESPEED);	//snimku za sekundu
