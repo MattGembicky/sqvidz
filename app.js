@@ -17,7 +17,7 @@ var SocketList = {};
 const WIDTH = 960;
 const HEIGHT = 960;
 const BORDERvalue = 24;
-const GAMESPEED = 60;		//snimku za sekundu
+const GAMESPEED = 30;		//snimku za sekundu
 
 var Entity = function(){	//zakladni objekt sveta
 	var self = {			//s pozici x,y,rychlostmi a id
