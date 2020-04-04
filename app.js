@@ -17,7 +17,7 @@ var SocketList = {};
 const WIDTH = 960;
 const HEIGHT = 960;
 const BORDERvalue = 24;
-const GAMESPEED = 30;		//snimku za sekundu
+const GAMESPEED = 60;		//snimku za sekundu
 
 var Entity = function(){	//zakladni objekt sveta
 	var self = {			//s pozici x,y,rychlostmi a id
@@ -51,7 +51,7 @@ var Player = function(id,username){		//player data
 		self.keyLeft = false;
 		self.keyUp =false;;
 		self.keyDown =false;
-		self.speed = 10;
+		self.speed = 5;
 		self.score = 0;
 		self.shot = false;
 		self.slaped = 0;
@@ -146,7 +146,7 @@ var Player = function(id,username){		//player data
 		if(self.purpose===0)
 			self.speed=0;
 		else if(self.shot==false)
-			self.speed=10;
+			self.speed=5;
 
 		if(self.slaped>0&&self.purpose===-1&&self.shot==false)
 		{
@@ -156,7 +156,7 @@ var Player = function(id,username){		//player data
 			else
 				self.speed=6;
 		}else if(self.purpose===-1&&self.shot==false){
-			self.speed = 10;
+			self.speed = 5;
 
 		}
 	}
@@ -176,22 +176,22 @@ var Player = function(id,username){		//player data
 		}
 		if(self.x<BORDERvalue){
 			self.shot=false;
-			self.speed=10;
+			self.speed=5;
 			self.x=BORDERvalue;
 		}
 		if(self.x>(WIDTH-BORDERvalue)){
 			self.shot=false;
-			self.speed=10;
+			self.speed=5;
 			self.x=WIDTH-BORDERvalue;
 		}
 		if(self.y<BORDERvalue){
 			self.shot=false;
-			self.speed=10;
+			self.speed=5;
 			self.y=BORDERvalue;
 		}
 		if(self.y>(HEIGHT-BORDERvalue)){
 			self.shot=false;
-			self.speed=10;
+			self.speed=5;
 			self.y=HEIGHT-BORDERvalue;
 		}
 	}
