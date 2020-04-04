@@ -66,6 +66,11 @@ var Player = function(id,username){		//player data
 		for(var i in Player.list){
 			var other = Player.list[i];
 			if(self.getDistanceTo(other)<28&&other.id !== self.id && other.ready == true){//kdyz vzdalenost a jine id a ready oba/*&& self.ready === true*/
+				socket.on('MsgToServer', function(msg){
+					for(var i in SocketList){
+						SocketList[i].emit('addTextMsg',"couple");
+					}
+				});
 			}
 		}
 	}

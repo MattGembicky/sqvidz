@@ -127,6 +127,9 @@
 		        	ctx.drawImage(Img.player,
 		        		0,0,Img.player.width,Img.player.height,
 		        		self.x-width/2,self.y-height/2,width,height);
+		        	ctx.drawImage(Img.player,
+		        		0,0,Img.player.width/2,Img.player.height/2,
+		        		self.x-width/2,self.y-height/2,width/2,height/2);
 		        }
 
 		        Player.list[self.id] = self;
