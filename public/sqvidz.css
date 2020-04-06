@@ -1,3 +1,7 @@
+@font-face {
+  font-family: mainFont;
+  src: url("/public/BRUX-Regular.ttf");
+}
 body{
 	margin: 0;
 	padding: 0;
@@ -24,6 +28,7 @@ body{
 		display: inline-block;
 		position: relative;
 		background-color: #FFFFFF;
+		z-index: 2;
 	}
 	#chatnlbni-container{
 		width: 200px;
@@ -130,11 +135,19 @@ body{
 	transform: translate(-50%);
 	border: 3px solid black;
 	z-index: 0;
+	display: none;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+ 	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+ 	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+	supported by Chrome, Opera and Firefox */
 }
 	.logo{
 		width: 50%;
 		margin-top: 10em;
-		position: relative;
+		position: absolute;
 		left: 47%;
 		transform: translate(-50%,0);
 	}
@@ -149,105 +162,214 @@ body{
 			margin: 0;
 			font-weight: bold;
 			color: #FFFFFF;
-			font-size: 7em;
+			font-size: 6em;
 			display: inline-block;
 			position: absolute; 
 			left:60%;
+			font-family: mainFont;
 		}
-	.login-box{
-		width: 300px;
-		height: 300px;
-		background-color: #FFFFFF;
-		border-radius: 16px;
-		position: relative;
-		left: 50%;
-		top: 15%;
-		transform: translate(-50%,0);
-		transition: 0.4s;
-	}
 	.version{
 		text-align: center;
 		color: red;
 		font-size: 5em;
 		display: block;
 	}
-	.login-box:hover{
-		width: 320px;
-		height: 320px;
+	.login-box-conatainer{
+		width: 100%;
+		top: 50%;
+		position: absolute;
 	}
-		#login-form{
-			width: 100%;
+		ul{
+			list-style-type: none;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		li{
+			float: left;
 			position: relative;
-			top: 30%;
-			z-index: 2;
+			left: 50%;
+			transform: translate(-50%,0);
 		}
-			.name-box{
-				width: 9.5vw;
-				height: 3vh;
-				position: relative;
-				left: 50%;
-				margin-top: 2vh;
-				transform: translate(-50%,0);
-				display: table;
-				border-radius: 8px;
-				text-decoration: none;
-				border: 2px solid #AAAABB;
-				font-size: 2vh;
-				transition: 0.1s;
-			}
-			.name-box:hover{
-				border-color: #666677;
-				letter-spacing: 0.1em;
-			}
-			.name-submit{
-				width: 100px;
-				height: 40px;
-				margin-top: 2vh;
-				border: none;
-				background-color: #5080bf;
-				color: #FFFFFF;
-				display: table;
-				text-decoration: none;
-				cursor: pointer;
-				position: relative;
-				left: 50%;
-				transform: translate(-50%,0);
-				border-radius: 8px;
-				font-size: 1.3em;
-				transition: 0.1s;
-				margin-bottom: 10px;
-			}
-			.name-submit:hover{
-				width: 120px;
-				height: 50px;
-				margin-bottom: 0;
-				background-color: #50bfbb;
-				font-size: 1.4em;
-				text-shadow: 2px 2px 5px #000044;
-				border: 5px solid #50afbb;
-				border-radius: 12px;
-			}
-			.name-border{
-				width: 95%;
-				margin: 0 auto 0;
-				text-align: center;
-				font-size: 1em;
-				top: 140px;
-				position: relative;
-				z-index: 1;
-			}
-		.fa-question-circle{
-			display: inline-block;
-			float: right;
-			margin-top: 0.5em;
-			margin-right: 0.5em;
-			z-index: 1;
-			font-size: 1.5em;
-			padding: 1px;
+		.login-box{
+			width: 300px;
+			height: 300px;
+			background-color: #FFFFFF;
+			border-radius: 16px;
+			position: relative;
+			left: 50%;
+			transform: translate(-50%,0);
 			transition: 0.4s;
-			color: #888899;
+			display: inline-block;
+			margin: 1em;
 		}
-		.fa-question-circle:hover{
-			border: 0.2em solid #888899;
-			border-radius: 50%;
+		
+		.login-box:hover{
+			width: 320px;
+			height: 320px;
 		}
+			#login-form{
+				width: 100%;
+				position: relative;
+				top: 30%;
+				z-index: 2;
+			}
+				.name-box{
+					width: 10vw;
+					min-width: 120px;
+					height: 3vh;
+					position: relative;
+					left: 50%;
+					margin-top: 2vh;
+					transform: translate(-50%,0);
+					display: table;
+					border-radius: 8px;
+					text-decoration: none;
+					border: 2px solid #AAAABB;
+					font-size: 2vh;
+					transition: 0.1s;
+				}
+				.name-box:hover{
+					border-color: #666677;
+					letter-spacing: 0.1em;
+					width: 12vw;
+				}
+				.name-submit{
+					width: 100px;
+					height: 40px;
+					margin-top: 2vh;
+					border: none;
+					background-color: #5080bf;
+					color: #FFFFFF;
+					display: table;
+					text-decoration: none;
+					cursor: pointer;
+					position: relative;
+					left: 50%;
+					transform: translate(-50%,0);
+					border-radius: 8px;
+					font-size: 1.3em;
+					transition: 0.1s;
+					margin-bottom: 10px;
+				}
+				.name-submit:hover{
+					width: 120px;
+					height: 50px;
+					margin-bottom: 0;
+					background-color: #50bfbb;
+					font-size: 1.4em;
+					text-shadow: 2px 2px 5px #000044;
+					border: 5px solid #50afbb;
+					border-radius: 12px;
+				}
+				.name-border{
+					width: 95%;
+					margin: 0 auto 0;
+					text-align: center;
+					font-size: 1em;
+					top: 140px;
+					position: relative;
+					z-index: 1;
+				}
+			.fa-question-circle{
+				display: inline-block;
+				float: right;
+				margin-top: 0.5em;
+				margin-right: 0.5em;
+				z-index: 1;
+				font-size: 1.5em;
+				padding: 1px;
+				transition: 0.4s;
+				color: #888899;
+			}
+			.fa-question-circle:hover{
+				border: 0.2em solid #888899;
+				border-radius: 50%;
+			}
+			#pick-form{
+				width: 95%;
+				height: 95%;
+				margin-top: 2.5%;
+				margin-left: 2.5%;
+			}
+				.pickSwitch{
+					background-color: #046263;
+					width: 6em;
+					height: 2em;
+					position: relative;
+					left: 35%;
+					transform: translate(-50%,0);
+					display: inline-block;
+					font-size: 1.5em;
+					font-family: mainFont;
+					border-radius: 1em;
+					color: #FFFFFF;
+					border: 2px solid #CCCCCC;
+					transition: 0.2s;
+				}
+				.pickSwitch:hover{
+					text-shadow: 2px 2px 5px #000000;
+					box-shadow: 2px 2px 5px #000000;
+					border: none;
+				}
+				.pickClothing{
+					position: relative;
+					top: 30%;
+					width: 10%;
+					float: left;
+					display: inline-table;
+				}
+					.pickClo{
+						padding-top: 0.2em;
+						text-align: center;
+						font-size: 1.5em;
+						width: 1.5em;
+						height: 1.3em;
+						background-color: #FFFFFF;
+						color: black;
+						border: 3px solid #CCCCCC;
+						border-radius: 50%;
+						margin-bottom: 0.2em;
+					}
+					.pickClo:hover{
+						color: #b00e59;
+						border-color: #000000;
+					}
+				.pickColor{
+					display: inline-block;
+					float: right;
+				}
+				.control {
+		            display: block;
+		            position: relative;
+		            padding-left: 30px;
+		            margin-bottom: 1.5em;
+		            cursor: pointer;
+		            transition: 0.1s;
+	        	}
+	            .control input {
+	                position: absolute;
+	                z-index: -1;
+	                opacity: 0;
+	            }
+		        .control_indicator {
+		            position: absolute;
+		            top: 2em;
+		            right: 0;
+		            height: 2em;
+		            width: 2em;
+		            background-color: #b00e59;
+		            border: 3px solid #CCCCCC;
+		        }
+		        .control:hover input ~ .control_indicator,
+		        .control input:focus ~ .control_indicator {
+		            opacity: 0.9;
+		        }
+		        
+		        .control input:checked ~ .control_indicator {
+		            border-color: #000000;
+		        }
+		        .control-radio .control_indicator {
+		            border-radius: 50%;
+		        } 
+

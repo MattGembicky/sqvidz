@@ -15,6 +15,7 @@
 	<body onload="dayTime()">
 		<div class="gameParts">
 			<canvas id="ctx" width="960" height="960"></canvas>
+			<canvas id="ctx-score" width="50" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
 			<div id="chatnlbni-container">
 				<h2 style="border-top: 0;background-color: #b00e59;">Leaderboard</h2>
 				<div id="lb-box"></div>
@@ -34,22 +35,72 @@
 			<h1 class="version">DEVELOPMENT VERSION</h1>
 			<div class="logo">
 				<h1 class="name-sqvidz" style="left: 50%;transform: translate(-100%,0);">SQV</h1>
-
 					<img class="sqvidTacle" src="" alt="sqvidTacle">
 				<h1 class="name-sqvidz">DZ.io</h1>
 			</div>
-			<div class="login-box">
-				<i class="fas fa-question-circle"></i>
-				<form id="login-form">
-					<input class="name-box" type="text" placeholder="username">
-					<input class="name-submit submit" type="submit" value="Play">
-				</form>
-				<p class="name-border">Make sure that you can see all of the black borders</p>
+			<div class="login-box-conatainer">
+				<ul>
+					<li>
+						<div class="login-box">
+							<i class="fas fa-question-circle"></i>
+							<form id="login-form">
+								<input class="name-box" type="text" placeholder="username">
+								<input class="name-submit submit" type="submit" value="Play">
+							</form>
+							<p class="name-border">Make sure that you can see all of the black borders</p>
+						</div>
+					</li>
+					<li>
+						<div class="login-box">
+							<form id="pick-form">
+								<input type="button" class="pickSwitch" name="so" value="SQUID" onclick="pickswitch()">
+								<div class="pickClothing">
+									<i class="pickClo fas fa-hat-cowboy"></i><br>
+									<i class="pickClo fab fa-black-tie"></i><br>
+									<i class="pickClo fas fa-ring"></i>
+								</div>
+								<div class="pickColor">
+									<div class="control-group">
+								        <label class="control control-radio"> 
+								            <input type="radio" name="radio" checked="checked" />
+								            <div class="control_indicator"></div>
+								        </label>
+								    </div><br>
+									<div class="control-group">
+								        <label class="control control-radio">
+								            <input type="radio" name="radio" />
+								            <div class="control_indicator" style="background-color: #046263;"></div>
+								        </label>
+								    </div><br>
+								    <div class="control-group">
+								        <label class="control control-radio">
+								            <input type="radio" name="radio" />
+								            <div class="control_indicator" style="background-color: #514d73;"></div>
+								        </label>
+								    </div><br>
+								    <div class="control-group">
+								        <label class="control control-radio">
+								            <input type="radio" name="radio" />
+								            <div class="control_indicator" style="background-color: #736c4d;"></div>
+								        </label>
+								    </div><br>
+								    <div class="control-group">
+								        <label class="control control-radio">
+								            <input type="radio" name="radio" />
+								            <div class="control_indicator" style="background-color: #576947;"></div>
+								        </label>
+								    </div>
+								</div>
+							</form>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 		<script>
 			function dayTime() {
+				document.getElementsByClassName("login")[0].style.display="block";
 				var fullDate = new Date();
 				var hoursNow = fullDate.getHours();
 				var tentacle = document.getElementsByClassName("sqvidTacle")[0];
@@ -58,6 +109,19 @@
 				else
 					tentacle.src ="/public/img/red_tentacle.png";
 			}
+
+			function pickswitch(){
+				var pswitch = document.getElementsByClassName("pickSwitch")[0];
+				if(pswitch.value==="SQUID"){
+					pswitch.value="OCTOPUS";
+					pswitch.style.backgroundColor="#b00e59";
+				}
+				else{
+					pswitch.value="SQUID";
+					pswitch.style.backgroundColor="#046263";
+				}
+			}
+
 			const WIDTH = 960;
 			const HEIGHT = 960;
 
@@ -107,7 +171,9 @@
 
 			//init
 			var ctx = document.getElementById("ctx").getContext("2d");
+			var ctx2 = document.getElementById("ctx-score").getContext("2d");
     		ctx.font = '30px Arial';
+    		ctx2.font = '30px Arial';
 
     		var Player = function(initPack){
 		        var self = {};
@@ -206,17 +272,21 @@
 		    setInterval(function(){
 		        ctx.clearRect(0,0,WIDTH,HEIGHT);
 		        ctx.drawImage(Img.background,0,0);
-		        drawScore();
 		        for(var i in Player.list)
 		          	Player.list[i].draw();  
-		    },1000/60);		//game speed
+		        drawScore();
+		    },1000/40);		//game speed
 
 		    var drawScore = function(){
-		    	ctx.font = '24px Arial';
-		    	ctx.fillStyle = 'white';
-		    	ctx.fillText(Player.list[selfId].score,18,HEIGHT-20);
+		    	if(lastscore===Player.list[selfId].score)
+		    		return;
+		    	lastscore=Player.list[selfId].score;
+		    	ctx2.clearRect(0,0,50,50);
+			    ctx2.font = '24px Arial';
+			    ctx2.fillStyle = 'white';
+			    ctx2.fillText(Player.list[selfId].score,18,20);
 		    }
-
+		    var lastscore = null;
 
     		//game movement
 			document.onkeydown = function(event){	//if key pressed
