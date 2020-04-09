@@ -25,8 +25,6 @@ var Entity = function(){	//zakladni objekt sveta
 		//y: Math.floor(Math.random() * (HEIGHT-128))+128,
 		x:250,
 		y:250,
-		speedX:10,
-		speedY:10,
 		id:"",
 	}
 	self.update = function(){		//upravi pozice
@@ -80,81 +78,85 @@ var Player = function(id,username){		//player data
 				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){//zjisteni zda uz nemaji ukol > priradi/*&& self.ready === true*/
 					var rng = Math.floor(Math.random() * 1)+0;
 					self.purpose = rng;
+					var bangle = Math.atan2(other.y - self.y, other.x - self.x);
 					if(rng===0){
 						other.purpose = 1;
-						other.friend = self.id;
+						other.angle = bangle;
 					}
 					else{
 						other.purpose = 0;
-						self.friend = other.id;
+						self.angle = bangle;
 					}
+					self.friend = other.id;
+					other.friend = self.id;
 				}
 			}
-			if(distance<32&&other.id !== self.id&&other.shot==true&&self.slaped===0){
-				other.score++;
-				for(var i in Player.list){
+			if(distance<32&&other.id !== self.id&&other.shot==true&&self.slaped===0&&other.id!==self.friend){
+				var enemy = other;
+				enemy.score++;//skore pro shot
+				
+				for(var i in Player.list){//hledani jeho pritele
 					var another = Player.list[i];
-					if(other.friend==another.id)
-						another.score++;
-					other.friend=undefined;
+					if(enemy.friend===another.id){
+						another.score++;//skore pro jeho partaka
+						enemy.friend=undefined;
+						another.friend=undefined;
+					}
 				}
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
 			}
 		}
 
-		if(self.purpose===1){
+		if(self.purpose===1){//tocici se
 			for(var i in Player.list){
 				var other = Player.list[i];
 				if(other.id==self.friend)
-					var matcher = Player.list[i];
+					var matcher = Player.list[i];//dostat pritele
 			}
-			var distance = self.getDistanceTo(matcher);
-			self.angle+=0.07+(64-distance)/500;
+			var distance = self.getDistanceTo(matcher);//toceni
+			self.angle+=0.1;
 			self.x = matcher.x + Math.cos(self.angle)*distance;
 			self.y = matcher.y + Math.sin(self.angle)*distance;	
-			if(self.angle>2*Math.PI){
+			if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni
 				self.angle=0;
 			}
 		}
 
 		for(var i in Player.list){
-			var other = Player.list[i];
-			if(other.id==self.friend){
-				if(self.getDistanceTo(other)>64){
+			var matcher = Player.list[i];
+			if(matcher.id==self.friend){
+				if(self.getDistanceTo(matcher)>64){//pojistka kdydy se oddalili
 					self.purpose=-1;
-					other.purpose=-1;
-					self.friend=undefined;
-					other.friend=undefined;
+					matcher.purpose=-1;
 				}
-				if(self.ready==false&&other.ready==false){
+				if(self.ready==false&&matcher.ready==false&&self.purpose===1){//vystreleni
 					self.purpose=-1;
+					matcher.purpose=-1;
 					self.shot=true;
 					self.speed=30;
-					other.purpose=-1;
-					other.friend=undefined;
 				}
 			}			
 		}
 
 
-		if(self.shot){
+		if(self.shot){//volani kdyz jsem strela
 			self.updateShot(self.angle);
 		}
 
 
-		if(self.purpose===0)
+		if(self.purpose===0)//kdyz vystreluju
 			self.speed=0;
-		else if(self.shot==false)
+		else if(self.shot==false)//kdyz nic nemam udel a nebo budu strela
 			self.speed=5;
 
-		if(self.slaped>0&&self.purpose===-1&&self.shot==false)
+		if(self.slaped>0&&self.purpose===-1&&self.shot==false)//kdyz mam stun, jsem nic a nejsem strela
 		{
-			self.slaped--;
-			if(self.slaped>GAMESPEED)
+			self.slaped--;//odpocet
+			if(self.slaped>GAMESPEED)//stun
 				self.speed=0;
 			else
-				self.speed=6;
+				self.speed=6;//na sekundu rychlejsi
 		}else if(self.purpose===-1&&self.shot==false){
 			self.speed = 5;
 
@@ -174,7 +176,7 @@ var Player = function(id,username){		//player data
 			if(self.keyDown)
 				self.speedY = self.speed;
 		}
-		if(self.x<BORDERvalue){
+		if(self.x<BORDERvalue){//hlidani borderu a narazu pri shotu
 			self.shot=false;
 			self.speed=5;
 			self.x=BORDERvalue;
@@ -196,7 +198,7 @@ var Player = function(id,username){		//player data
 		}
 	}
 	self.updateShot = function(angle){
-		angle+=Math.PI/2;
+		angle+=Math.PI/2;//pro nasmerovani spravnym smerem se musi pricist PI/2
 		if(self.shot){
 			self.x += Math.cos(angle)*20;
 			self.y += Math.sin(angle)*20;

@@ -35,7 +35,7 @@ body{
 		height: 956px;
 		float: right;
 		display: inline-block;
-		background-color: #856635;
+		background-color: #FFFFFF;
 		border: 3px solid #000000;
 	}
 		h2{
@@ -49,71 +49,49 @@ body{
 		}
 		#lb-box{
 			width: 95%;
-			height: 285px;
+			height: 385px;
 			padding-left: 5%;
 			background-color: #73093a;
 			color: #FFFFFF;
 		}
-		#info-box{
-			width: 90%;
-			height: 200px;
-			padding-left: 5%;
-			padding-right: 5%;
-			background-color: #044252;	
-		}
-		#info-gameType{
-			width: 80%;
-			padding-top: 0.7em;
-			padding-bottom: 0.7em;
-			background-color: #69f5d0;
-			position: relative;
-			top: 5%;
-			border-radius: 8px;
-			margin: 0 auto 0;
-			text-align: center;
-			box-shadow: 2px 4px #000000;
-		}
-		#info-gameType:hover{
-			background-color: #00ffbc;
-			width: 85%;
-			box-shadow: 3px 5px #000000;
-		}
 		#chat-box{
 			width: 95%;
-			height: 343px;
+			height: 478px;
 			padding-left: 5%;
-			overflow-y:scroll;
-			background-color: #856635;
+			overflow-y: scroll;
+			background-color: #044252;
 		}
 		#chat-box::-webkit-scrollbar {
 		  width: 10px;
 		}
 		#chat-box::-webkit-scrollbar-track {
-		  background: #87714e; 
+		  background: #044252; 
+		}
+		#chat-box::-webkit-scrollbar-track:hover {
+		  background: #155363; 
 		}
 		#chat-box::-webkit-scrollbar-thumb {
-		  background: #543d18;
+		  background: #044252;
 		 }
 		#chat-box::-webkit-scrollbar-thumb:hover {
-		  background: #362408; 
+		  background: #046263; 
 		}
 		#chat-input{
 			width:147px;
 			height:19px;
 			display: inline;
-			border-color: #634b04;
-			background-color: #a68f6c;
+			border-color: #046263;
+			background-color: #327373;
 			margin: 0;
 		}
 		#chat-input::placeholder {
-			color: #362408;
-			opacity: 1;
+			color: #FFFFFF;
 		}
 		.submit{
 			width: 42px;
 			height: 25px;
 			border: 1px solid #000000;
-			background-color: #634b04;
+			background-color: #046263;
 			color: black;
 			display: inline-block;
 			text-decoration: none;
