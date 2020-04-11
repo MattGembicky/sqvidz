@@ -45,6 +45,7 @@ var Player = function(id,username){		//player data
 		self.id = id;
 		self.name = username;
 		self.ready = false;			//space
+		self.invert = false;
 		self.keyRight = false;		//Rarrow or Dkey
 		self.keyLeft = false;
 		self.keyUp =false;;
@@ -130,7 +131,10 @@ var Player = function(id,username){		//player data
 			}
 			if(matcher){
 				var distance = self.getDistanceTo(matcher);//toceni
-				self.angle+=0.1;
+				if(self.invert)
+					self.angle+=0.1;
+				else
+					self.angle-=0.1;
 				self.x = matcher.x + Math.cos(self.angle)*distance;
 				self.y = matcher.y + Math.sin(self.angle)*distance;	
 				if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni
@@ -215,7 +219,10 @@ var Player = function(id,username){		//player data
 		}
 	}
 	self.updateShot = function(angle){
-		angle+=Math.PI/2;//pro nasmerovani spravnym smerem se musi pricist PI/2
+		if(self.invert)//pro nasmerovani spravnym smerem se musi pricist nebo odecist PI/2
+			angle+=Math.PI/2;
+		else
+			angle-=Math.PI/2;
 		if(self.shot){
 			self.x += Math.cos(angle)*20;
 			self.y += Math.sin(angle)*20;
@@ -238,6 +245,7 @@ var Player = function(id,username){		//player data
 			x:self.x,
 			y:self.y,
 			ready:self.ready,
+			invert:self.invert,
 			score:self.score,
 		};
 	}
@@ -262,6 +270,8 @@ Player.onConnect = function(socket,username){
   			player.keyDown = data.state;
   		if(data.inputId==='space')
   			player.ready = data.state;
+  		if(data.inputId==='shift')
+  			player.invert = data.state;
 	});
 
 	socket.emit('init',{

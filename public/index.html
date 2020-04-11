@@ -301,7 +301,12 @@
 					socket.emit('keyPress',{inputId:'down',state: true});
 				if(event.keyCode === 32)							//Spacebar
 					socket.emit('keyPress',{inputId:'space',state: true});
+				if(event.keyCode === 16){							//Shift
+					socket.emit('keyPress',{inputId:'shift',state: istate});
+					istate=!istate;
+				}
 			}
+			var istate = true;
 			document.onkeyup = function(event){	//if key released
 				if(event.keyCode === 68 || event.keyCode === 39)	//Dkey or Rarrow
 					socket.emit('keyPress',{inputId:'right',state: false});
