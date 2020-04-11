@@ -108,27 +108,44 @@ var Player = function(id,username){		//player data
 			}
 		}
 
-		if(self.purpose===1){//tocici se
+		if(self.purpose>-1){
+			var control = false;
 			for(var i in Player.list){
 				var other = Player.list[i];
-				if(other.id==self.friend)
-					var matcher = Player.list[i];//dostat pritele
+				if(other.id===self.friend)
+					control = true;
 			}
-			var distance = self.getDistanceTo(matcher);//toceni
-			self.angle+=0.1;
-			self.x = matcher.x + Math.cos(self.angle)*distance;
-			self.y = matcher.y + Math.sin(self.angle)*distance;	
-			if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni
-				self.angle=0;
+			if(!control){
+				self.friend=0;
+				self.purpose=-1;
+			}
+		}	
+
+		if(self.purpose===1){//tocici se
+			var matcher = 0;
+			for(var i in Player.list){
+				var other = Player.list[i];
+				if(other.id===self.friend)
+					matcher = Player.list[i];//dostat pritele
+			}
+			if(matcher){
+				var distance = self.getDistanceTo(matcher);//toceni
+				self.angle+=0.1;
+				self.x = matcher.x + Math.cos(self.angle)*distance;
+				self.y = matcher.y + Math.sin(self.angle)*distance;	
+				if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni
+					self.angle=0;
+				}
 			}
 		}
 
 		for(var i in Player.list){
 			var matcher = Player.list[i];
-			if(matcher.id==self.friend){
-				if(self.getDistanceTo(matcher)>64){//pojistka kdydy se oddalili
+			if(matcher.id===self.friend){
+				if(self.getDistanceTo(matcher)>64&&self.purpose!==-1){//pojistka kdydy se oddalili
 					self.purpose=-1;
 					matcher.purpose=-1;
+					self.friend=undefined;
 				}
 				if(self.ready==false&&matcher.ready==false&&self.purpose===1){//vystreleni
 					self.purpose=-1;

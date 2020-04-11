@@ -225,31 +225,6 @@
 		    });
 		    var leaderupdate = function(data){
 		    	var lbBox = document.getElementById("lb-box");
-		    	/*
-		    	var lbScore = [];
-
-		    	for(var i = 0; i < data.player.length; i++){
-		            var pack = data.player[i];
-		            lbScore[i] = pack.score;
-		        }
-		        lbScore = lbScore.sort(function(a, b){return b-a});
-
-		        var text = "";
-		       	for(var k = 0; k < 10 || k < lbScore.length; k++){
-		       		var usedNames = [];
-			        for(var i = 0; i < data.player.length; i++){
-				        var pack = data.player[i];
-				        if(lbScore[k]===pack.score&&pack.id!==usedNames[k-1]){
-				            text += (k+1)+'. '+pack.name;
-				            for(var ii = 1; ii < (10-pack.name.length); ii++)
-				            	text += '..';
-				            text += pack.score+'<br>';
-				            break;
-				            usedNames[k]=pack.id;
-				        }
-			        }
-			    }
-			    */
 			    var lbScore = [];var lbPlayer = [];
 
 		    	for(var i = 0; i < data.player.length; i++){
