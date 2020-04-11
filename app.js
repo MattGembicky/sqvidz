@@ -21,10 +21,8 @@ const GAMESPEED = 40;		//snimku za sekundu
 
 var Entity = function(){	//zakladni objekt sveta
 	var self = {			//s pozici x,y,rychlostmi a id
-		//x: Math.floor(Math.random() * (WIDTH-128))+128,
-		//y: Math.floor(Math.random() * (HEIGHT-128))+128,
-		x:250,
-		y:250,
+		x: Math.floor(Math.random() * (WIDTH-128))+128,
+		y: Math.floor(Math.random() * (HEIGHT-128))+128,
 		id:"",
 	}
 	self.update = function(){		//upravi pozice
