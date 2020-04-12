@@ -106,10 +106,11 @@ var Player = function(id,username){		//player data
 				self.slaped=GAMESPEED*3;
 				if(self.friend!==undefined){
 					var matcher = 0;
-					//for(var i in Player.list){
-						//another = Player.list[i];
-						//if(another.id===self.friend)
-							//matcher = Player.list[i];
+					for(var i in Player.list){
+						another = Player.list[i];
+						if(another.id===self.friend)
+							matcher = Player.list[i];
+					}
 					self.friend=undefined;
 					matcher.friend=undefined;
 				}
