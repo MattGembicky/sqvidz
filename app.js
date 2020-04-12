@@ -90,7 +90,7 @@ var Player = function(id,username){		//player data
 					other.friend = self.id;
 				}
 			}
-			if(distance<32&&other.id !== self.id&&other.shot==true&&self.slaped===0&&other.id!==self.friend){
+			if(distance<48&&other.id !== self.id&&other.shot==true&&self.slaped===0&&other.id!==self.friend){
 				var enemy = other;
 				enemy.score++;//skore pro shot
 				
@@ -104,6 +104,16 @@ var Player = function(id,username){		//player data
 				}
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
+				if(self.friend!==undefined){
+					self.friend=undefined;
+					var matcher = 0;
+					for(var i in Player.list){
+						var other = Player.list[i];
+						if(other.id===self.friend)
+							matcher = Player.list[i];
+					matcher.friend=undefined;
+				}
+
 			}
 		}
 
