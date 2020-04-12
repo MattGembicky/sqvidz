@@ -104,6 +104,10 @@ var Player = function(id,username){		//player data
 				}
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
+				if(self.purpose>=0){
+					self.friend=0;
+					self.purpose=-1;
+				}
 			}
 		}
 
