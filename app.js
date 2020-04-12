@@ -98,8 +98,8 @@ var Player = function(id,username){		//player data
 					var another = Player.list[i];
 					if(enemy.friend===another.id){
 						another.score++;//skore pro jeho partaka
-						enemy.friend=undefined;
-						another.friend=undefined;
+						//enemy.friend=undefined;
+						//another.friend=undefined;
 					}
 				}
 				console.log(self.name+" slaped");
@@ -206,23 +206,37 @@ var Player = function(id,username){		//player data
 			if(self.keyDown)
 				self.speedY = self.speed;
 		}
+		var matcher = 0;
+			for(var i in Player.list){
+				var other = Player.list[i];
+				if(other.id===self.friend)
+					matcher = Player.list[i];//dostat pritele
+			}
 		if(self.x<BORDERvalue){//hlidani borderu a narazu pri shotu
 			self.shot=false;
+			self.friend=undefined;
+			matcher.friend=undefined;
 			self.speed=5;
 			self.x=BORDERvalue;
 		}
 		if(self.x>(WIDTH-BORDERvalue)){
 			self.shot=false;
+			self.friend=undefined;
+			matcher.friend=undefined;
 			self.speed=5;
 			self.x=WIDTH-BORDERvalue;
 		}
 		if(self.y<BORDERvalue){
 			self.shot=false;
+			self.friend=undefined;
+			matcher.friend=undefined;
 			self.speed=5;
 			self.y=BORDERvalue;
 		}
 		if(self.y>(HEIGHT-BORDERvalue)){
 			self.shot=false;
+			self.friend=undefined;
+			matcher.friend=undefined;
 			self.speed=5;
 			self.y=HEIGHT-BORDERvalue;
 		}
