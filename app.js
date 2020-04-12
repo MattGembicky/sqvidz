@@ -105,13 +105,13 @@ var Player = function(id,username){		//player data
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
 				if(self.friend!==undefined){
-					self.friend=undefined;
-					/*var matcher = 0;
+					var matcher = 0;
 					for(var i in Player.list){
 						another = Player.list[i];
 						if(another.id===self.friend)
 							matcher = Player.list[i];
-					matcher.friend=undefined;*/
+					self.friend=undefined;
+					matcher.friend=undefined;
 				}
 
 			}
