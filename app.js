@@ -73,7 +73,7 @@ var Player = function(id,username){		//player data
 		for(var i in Player.list){
 			var other = Player.list[i];
 			var distance = self.getDistanceTo(other);
-			if(distance<64&&other.id !== self.id&&self.splaped===0){//kdyz vzdalenost a jine id 
+			if(distance<64&&other.id !== self.id){//kdyz vzdalenost a jine id 
 				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){//zjisteni zda uz nemaji ukol > priradi/*&& self.ready === true*/
 					var rng = Math.floor(Math.random() * 1)+0;
 					self.purpose = rng;
@@ -90,7 +90,7 @@ var Player = function(id,username){		//player data
 					other.friend = self.id;
 				}
 			}
-			if(distance<48&&other.id !== self.id&&other.shot==true&&self.slaped===0&&other.id!==self.friend){
+			if(distance<32&&other.id !== self.id&&other.shot==true&&self.slaped===0&&other.id!==self.friend){
 				var enemy = other;
 				enemy.score++;//skore pro shot
 				
@@ -130,7 +130,7 @@ var Player = function(id,username){		//player data
 			if(matcher){
 				var distance = self.getDistanceTo(matcher);//toceni
 				if(self.invert)
-					self.angle+=0.10472;//6deg
+					self.angle+=0.10472;//6
 				else
 					self.angle-=0.10472;
 				self.x = matcher.x + Math.cos(self.angle)*distance;
