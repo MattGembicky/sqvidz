@@ -73,7 +73,7 @@ var Player = function(id,username){		//player data
 		for(var i in Player.list){
 			var other = Player.list[i];
 			var distance = self.getDistanceTo(other);
-			if(distance<64&&other.id !== self.id){//kdyz vzdalenost a jine id 
+			if(distance<64&&other.id!==self.id&&self.slaped===0){//kdyz vzdalenost a jine id 
 				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){//zjisteni zda uz nemaji ukol > priradi/*&& self.ready === true*/
 					var rng = Math.floor(Math.random() * 1)+0;
 					self.purpose = rng;
