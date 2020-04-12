@@ -130,9 +130,9 @@ var Player = function(id,username){		//player data
 			if(matcher){
 				var distance = self.getDistanceTo(matcher);//toceni
 				if(self.invert)
-					self.angle+=0.1;
+					self.angle+=0.10472;//6deg
 				else
-					self.angle-=0.1;
+					self.angle-=0.10472;
 				self.x = matcher.x + Math.cos(self.angle)*distance;
 				self.y = matcher.y + Math.sin(self.angle)*distance;	
 				if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni

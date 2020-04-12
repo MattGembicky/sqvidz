@@ -1,5 +1,6 @@
 			const WIDTH = 960;
 			const HEIGHT = 960;
+			const GAMESPEED = 40;
 
 			var Img = {};
 			Img.player = new Image();
@@ -12,30 +13,6 @@
 			Img.background.src = '/public/img/background.png';
 
 			var socket = io();
-
-			//chat
-			var chatInput = document.getElementById("chat-input");
-			var chatForm = document.getElementById("chat-form");
-			var chatContainer = document.getElementById("chat-box");
-    		socket.on('addTextMsg',function(msg){
-    			chatContainer.innerHTML += '<div>'+msg+'</div';
-  					chatContainer.scrollTo(0,Number.MAX_SAFE_INTEGER);
-    		});
-
-    		socket.on('evalServer',function(data){
-    			console.log(data);
-    		});
-
-    		chatForm.onsubmit = function(e){
-    			e.preventDefault();
-    			if(chatInput.value[0]!=='/')
-    				socket.emit('MsgToServer',chatInput.value);//msg
-    			else
-    				socket.emit('evalServer',chatInput.value.slice(1));//eval
-    			chatInput.value = '';
-    		}
-
-			
 
 			//init
 			var ctx = document.getElementById("ctx").getContext("2d");
@@ -148,7 +125,8 @@
 		        for(var i in Player.list)
 		          	Player.list[i].draw();  
 		        drawScore();
-		    },1000/60);		//game speed
+		        timerShift--;
+		    },1000/GAMESPEED);		//game speed
 
 		    var drawScore = function(){
 		    	//if(Player.list[selfId].score===0||lastscore==Player.list[selfId].score)
@@ -175,10 +153,15 @@
 					socket.emit('keyPress',{inputId:'space',state: true});
 				if(event.keyCode === 16){							//Shift
 					socket.emit('keyPress',{inputId:'shift',state: istate});
-					istate=!istate;
+					if(timerShift<=0){
+						istate=!istate;
+						timerShift=GAMESPEED*2;
+					}
 				}
 			}
 			var istate = true;
+			var timerShift = 0;
+
 			document.onkeyup = function(event){	//if key released
 				if(event.keyCode === 68 || event.keyCode === 39)	//Dkey or Rarrow
 					socket.emit('keyPress',{inputId:'right',state: false});

@@ -12,7 +12,7 @@
 	    <script src="https://kit.fontawesome.com/53b570c0b2.js" crossorigin="anonymous"></script>
 	    <link rel="stylesheet" type="text/css" href="/public/sqvidz.css">
 	</head>
-	<body onload="dayTime()">
+	<body>
 		<div class="gameParts">
 			<canvas id="ctx" width="960" height="960"></canvas>
 			<canvas id="ctx-score" width="50" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
@@ -58,31 +58,31 @@
 								<div class="pickColor">
 									<div class="control-group">
 								        <label class="control control-radio"> 
-								            <input type="radio" name="radio" checked="checked" />
+								            <input class="colorSO" type="radio" name="radio" />
 								            <div class="control_indicator"></div>
 								        </label>
 								    </div><br>
 									<div class="control-group">
 								        <label class="control control-radio">
-								            <input type="radio" name="radio" />
+								            <input class="colorSO" type="radio" name="radio" />
 								            <div class="control_indicator" style="background-color: #046263;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
-								            <input type="radio" name="radio" />
+								            <input class="colorSO" type="radio" name="radio" />
 								            <div class="control_indicator" style="background-color: #514d73;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
-								            <input type="radio" name="radio" />
+								            <input class="colorSO" type="radio" name="radio" />
 								            <div class="control_indicator" style="background-color: #736c4d;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
-								            <input type="radio" name="radio" />
+								            <input class="colorSO" type="radio" name="radio" />
 								            <div class="control_indicator" style="background-color: #576947;"></div>
 								        </label>
 								    </div>
@@ -102,7 +102,8 @@
 		</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 		<script>
-			function dayTime() {
+
+			 window.onload = function() {
 				document.getElementsByClassName("login")[0].style.display="block";
 				var fullDate = new Date();
 				var hoursNow = fullDate.getHours();
@@ -112,8 +113,14 @@
 				else
 					tentacle.src ="/public/img/red_tentacle.png";
 				document.getElementsByClassName("name-box")[0].value=getCookie("username");
-				if(getCookie("clicked"))
+				if(getCookie("type")==="OCTOPUS")
+					pickswitch();
+				var i = parseInt(getCookie("color"));
+				document.getElementsByClassName("colorSO")[i].checked=true;
+				if(getCookie("clicked")){
 					document.getElementsByClassName("cookieAcc")[0].style.display="none";
+					document.getElementsByTagName("body")[0].style.overflow="scroll";
+				}
 			}
 			function pickswitch(){
 				var pswitch = document.getElementsByClassName("pickSwitch")[0];
@@ -130,40 +137,21 @@
 			document.getElementById("login-form").onsubmit = function(e){
     			e.preventDefault();
     			var nameBox = document.getElementsByClassName("name-box")[0];
+    			var pswitch = document.getElementsByClassName("pickSwitch")[0];
+    			var chosen = 0;
+    			for(var i = 0;i<5;i++)
+    				if(document.getElementsByClassName("colorSO")[i].checked)
+    					chosen = i;
     			socket.emit('usernameIn',nameBox.value);
     			setCookie("username",nameBox.value,30);
+    			setCookie("color",chosen,30);
+    			setCookie("type",pswitch.value,30);
     			document.getElementsByClassName("login")[0].style.display="none";
     			document.getElementsByClassName("gameParts")[0].style.display="block";
     		}
-
-    		document.getElementById("cookie-form").onsubmit = function(e){
-    			e.preventDefault();
-    			document.getElementsByClassName("cookieAcc")[0].style.display="none";
-    			setCookie('clicked',true,365);
-    		}
-
-    		function setCookie(cname, cvalue, exdays) {
-				var d = new Date();
-				d.setTime(d.getTime() + (exdays*24*60*60*1000));
-				var expires = "expires="+ d.toUTCString();
-				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-			}
-			function getCookie(cname) {
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for(var i = 0; i <ca.length; i++){
-			    	var c = ca[i];
-			  		while (c.charAt(0) == ' '){
-			    		c = c.substring(1);
-			   		}
-				    if (c.indexOf(name) == 0){
-				    	return c.substring(name.length, c.length);
-				    }
-				}
-				return "";
-			}
 		</script>
 		<script type="text/javascript" src="/public/js/game.js"></script>
+		<script type="text/javascript" src="/public/js/chat.js"></script>
+		<script type="text/javascript" src="/public/js/cookies.js"></script>
 	</body>
 </html>
