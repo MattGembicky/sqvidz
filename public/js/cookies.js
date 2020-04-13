@@ -1,7 +1,7 @@
 document.getElementById("cookie-form").onsubmit = function(e){
  	e.preventDefault();
 	document.getElementsByClassName("cookieAcc")[0].style.display="none";
-	document.getElementsByTagName("body")[0].style.overflow="scroll";
+	document.getElementsByTagName("body")[0].style.overflow="auto";
 	setCookie('clicked',true,365);
 }
 

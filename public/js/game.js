@@ -4,12 +4,14 @@
 
 			var Img = {};
 			Img.player = new Image();
+			Img.newplayer = new Image();
 			Img.logoR = new Image();
 			Img.logoB = new Image();
 			Img.background = new Image();
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
 			Img.player.src = '/public/img/Octalia.gif';
+			Img.newplayer.src = '/public/img/octolia.png';
 			Img.background.src = '/public/img/background.png';
 
 			var socket = io();
@@ -27,17 +29,19 @@
 		        self.x = initPack.x;
 		        self.y = initPack.y;
 		        self.score = initPack.score;
+		        self.currFrame = 0;
 
 		        self.draw = function(){
 		        	var width = 64;
 		        	var height = 64;
+		        	var imgWidth = 128;
+		        	var imgHeight = 128;
 		        	ctx.font = '16px Arial';
 		        	ctx.fillText(self.name,self.x-16,self.y-28);
-		        	/*var widthOfP = Img.player.width*2;
-		        	var heightOfP = Img.player.height*2;*/
-		        	ctx.drawImage(Img.player,
-		        		0,0,Img.player.width,Img.player.height,
-		        		self.x-width/2,self.y-height/2,width,height);
+		        	ctx.drawImage(Img.newplayer,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
+		        	self.currFrame+=0.4;
+		        	if(self.currFrame>28)
+		        		self.currFrame=0;
 		        }
 
 		        Player.list[self.id] = self;

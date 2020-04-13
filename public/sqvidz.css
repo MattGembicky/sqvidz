@@ -200,6 +200,7 @@ body{
 					width: 10vw;
 					min-width: 120px;
 					height: 3vh;
+					min-height: 30px;
 					position: relative;
 					left: 50%;
 					margin-top: 1vh;
@@ -208,7 +209,7 @@ body{
 					border-radius: 8px;
 					text-decoration: none;
 					border: 2px solid #AAAABB;
-					font-size: 2vh;
+					font-size: 1em;
 					transition: 0.1s;
 				}
 				.name-box:hover{
@@ -336,7 +337,6 @@ body{
 					}
 					.control_indicator {
 						position: absolute;
-						top: 2em;
 						right: 0;
 						height: 2em;
 						width: 2em;
@@ -353,9 +353,7 @@ body{
 					}
 					.control-radio .control_indicator {
 						border-radius: 50%;
-					} 
-
-
+					}
 						.cookieAcc{
 							position: fixed;
 							width: 100%;
