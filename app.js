@@ -460,6 +460,8 @@ var removePack = {player:[],point:[]};
 
 
 setInterval(function(){		//game Loop
+	if(Math.floor((Math.random()*40))===1)
+		var p = Point();
 	var pack = {
 		player:Player.update(),
 		point:Point.update(),
@@ -475,8 +477,3 @@ setInterval(function(){		//game Loop
 	removePack.player = [];
 	removePack.point = [];
 },1000/GAMESPEED);	//snimku za sekundu
-
-setInterval(function(){
-	if(Math.floor((Math.random()*10))===1)
-		var p = Point();
-},10000);
