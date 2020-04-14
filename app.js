@@ -479,4 +479,4 @@ setInterval(function(){		//game Loop
 setInterval(function(){
 	if(Math.floor((Math.random()*10))===1)
 		var p = Point();
-},1000);
+},10000);
