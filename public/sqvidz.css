@@ -375,3 +375,21 @@ body{
 							border-radius: 2em;
 							border: 5px solid #AAAABB;
 						}
+
+
+
+			.msg-name-red{
+				color: #e33f8c;
+			}
+			.msg-name-blue{
+				color: #379596;
+			}
+			.msg-name-violet{
+				color: #847fa6;
+			}
+			.msg-name-yellow{
+				color: #a69f7f;
+			}
+			.msg-name-green{
+				color: #8a9c7a;
+			}

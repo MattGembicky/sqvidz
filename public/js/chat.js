@@ -3,7 +3,7 @@ var chatForm = document.getElementById("chat-form");
 var chatContainer = document.getElementById("chat-box");
 
 socket.on('addTextMsg',function(msg){
-	chatContainer.innerHTML += '<div>'+msg+'</div';
+	chatContainer.innerHTML += '<div>'+msg+'</div>';
 	chatContainer.scrollTo(0,Number.MAX_SAFE_INTEGER);//scroll
 });
 

@@ -15,7 +15,7 @@
 	<body>
 		<div class="gameParts">
 			<canvas id="ctx" width="960" height="960"></canvas>
-			<canvas id="ctx-score" width="50" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
+			<canvas id="ctx-score" width="100" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
 			<div id="chatnlb-container">
 				<h2 style="border-top: 0;background-color: #b00e59;">Leaderboard</h2>
 					<div id="lb-box"></div>
@@ -40,7 +40,7 @@
 						<div class="login-box">
 							<i class="fas fa-question-circle"></i>
 							<form id="login-form">
-								<input class="name-box" type="text" placeholder="username">
+								<input class="name-box" type="text" maxlength="20" placeholder="username">
 								<input class="name-submit submit" type="submit" value="Play">
 							</form>
 							<p class="name-border">Make sure that you can see all of the black borders</p>
@@ -116,7 +116,7 @@
 				document.getElementsByClassName("name-box")[0].value=getCookie("username");
 				if(getCookie("type")==="OCTOPUS")
 					pickswitch();
-				var i = parseInt(getCookie("color"));
+				var i = parseInt(getCookie("color"))-1;
 				document.getElementsByClassName("colorSO")[i].checked=true;
 				if(getCookie("clicked")){
 					document.getElementsByClassName("cookieAcc")[0].style.display="none";
@@ -142,8 +142,8 @@
     			var chosen = 0;
     			for(var i = 0;i<5;i++)
     				if(document.getElementsByClassName("colorSO")[i].checked)
-    					chosen = i;
-    			socket.emit('usernameIn',nameBox.value);
+    					chosen = i+1;
+    			socket.emit('usernameIn',{username: nameBox.value ,color: chosen});
     			setCookie("username",nameBox.value,30);
     			setCookie("color",chosen,30);
     			setCookie("type",pswitch.value,30);

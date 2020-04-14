@@ -7,10 +7,13 @@
 			Img.logoR = new Image();
 			Img.logoB = new Image();
 			Img.background = new Image();
+			Img.point1 = new Image();
+
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
 			Img.player.src = '/public/img/octolia.png';
 			Img.background.src = '/public/img/background.png';
+			Img.point1.src = '/public/img/point.png';
 
 			var socket = io();
 
@@ -34,8 +37,12 @@
 		        	var height = 64;
 		        	var imgWidth = 128;
 		        	var imgHeight = 128;
-		        	ctx.font = '16px Arial';
-		        	ctx.fillText(self.name,self.x-16,self.y-28);
+		        	ctx.font = '12px Arial';
+		        	var name = self.name;
+		        	if(self.name.length>10)
+		        		name = self.name.slice(0,10);
+		        	let text = ctx.measureText(name);
+		        	ctx.fillText(name, self.x-(text.width/2), self.y-28);
 		        	ctx.drawImage(Img.player,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
 		        	self.currFrame+=0.4;
 		        	if(self.currFrame>28)
@@ -46,6 +53,23 @@
 		        return self;
 		    }
 		    Player.list = {};
+
+
+		    var Point = function(initPack){
+		        var self = {};
+		        self.id = initPack.id;
+        		self.x = initPack.x;
+        		self.y = initPack.y;
+
+		        self.draw = function(){
+		        	ctx.drawImage(Img.point1,0,0,32,32,self.x,self.y,16,16);
+		        }
+
+		        Point.list[self.id] = self;
+		        return self;
+		    }
+		    Point.list = {};
+		   
 		 	
 			var selfId = null; 
 
@@ -56,6 +80,9 @@
 		        for(var i = 0 ; i < data.player.length; i++){
 		            new Player(data.player[i]);
 		        }
+		        for(var i = 0 ; i < data.point.length; i++){
+           			new Point(data.point[i]);
+        		}
 		    });
 		   
 		    socket.on('update',function(data){
@@ -70,6 +97,16 @@
 		                    p.y = pack.y;
 		                if(pack.score !== undefined)
 		                    p.score = pack.score;
+		            }
+		        }
+		        for(var i = 0 ; i < data.point.length; i++){
+		            var pack = data.point[i];
+		            var s = Point.list[data.point[i].id];
+		            if(s){
+		                if(pack.x !== undefined)
+		                    s.x = pack.x;
+		                if(pack.y !== undefined)
+		                    s.y = pack.y;
 		            }
 		        }
 		        leaderupdate(data);
@@ -119,11 +156,16 @@
 		        for(var i = 0 ; i < data.player.length; i++){
 		            delete Player.list[data.player[i]];
 		        }
+		        for(var i = 0 ; i < data.point.length; i++){
+		            delete Point.list[data.point[i]];
+		        }
 		    });
 		   	
 		    setInterval(function(){
 		        ctx.clearRect(0,0,WIDTH,HEIGHT);
 		        ctx.drawImage(Img.background,0,0);
+		        for(var i in Point.list)
+		          	Point.list[i].draw();
 		        for(var i in Player.list)
 		          	Player.list[i].draw();  
 		        drawScore();
@@ -135,7 +177,7 @@
 		    	if(typeof Player.list[selfId].score == 'number'&&lastscore==Player.list[selfId].score)
 		    		return;
 		    	lastscore=Player.list[selfId].score;
-		    	ctx2.clearRect(0,0,50,50);
+		    	ctx2.clearRect(0,0,100,50);
 			    ctx2.font = '24px Arial';
 			    ctx2.fillStyle = 'white';
 			    ctx2.fillText(Player.list[selfId].score,18,20);

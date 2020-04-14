@@ -38,7 +38,7 @@ var Entity = function(){	//zakladni objekt sveta
 	return self;
 }
 
-var Player = function(id,username){		//player data
+var Player = function(id,username,color){		//player data
 	var self = Entity();
 		self.id = id;
 		self.name = username;
@@ -55,6 +55,16 @@ var Player = function(id,username){		//player data
 		self.purpose = -1;
 		self.friend = 0;
 		self.angle = 0;
+		if(color===1)
+			self.color="red";
+		else if(color===2)
+			self.color="blue";
+		else if(color===3)
+			self.color="violet";
+		else if(color===4)
+			self.color="yellow";
+		else if(color===5)
+			self.color="green";
 
 		if(self.name==='aaa')		//smazat
 		    self.score=1;
@@ -174,7 +184,6 @@ var Player = function(id,username){		//player data
 			self.updateShot(self.angle);
 		}
 
-
 		if(self.purpose===0)//kdyz vystreluju
 			self.speed=0;
 		else if(self.shot==false)//kdyz nic nemam udel a nebo budu strela
@@ -278,10 +287,11 @@ var Player = function(id,username){		//player data
 	initPack.player.push(self.getInitPack());
 	return self;
 }
+
 Player.list = {};
 
-Player.onConnect = function(socket,username){
-	var player = Player(socket.id,username);		//pri pripojeni vytvori hrace
+Player.onConnect = function(socket,username,color){
+	var player = Player(socket.id,username,color);		//pri pripojeni vytvori hrace
 	socket.on('keyPress', function(data){	//pri zmacknuti od clienta
   		if(data.inputId==='right')
   			player.keyRight = data.state;
@@ -325,15 +335,92 @@ Player.update = function(){
     return pack;
 }
 
+var Point = function(){
+    var self = Entity();
+    self.id = Math.random();
+    self.speedX = Math.random()*10;
+    self.speedY = Math.random()*10; 
+    self.toRemove = false;
+    self.timer = 0;
+
+    var super_update = self.update;
+    self.update = function(){
+        super_update();
+        self.updateDirection();
+        for(var i in Player.list){
+            var p = Player.list[i];
+            if(self.getDistanceTo(p) < 32){//vzdalenost //hitbox
+                self.toRemove = true;
+                p.score+=1;
+            }
+        }
+        self.timer++;
+    }
+
+    self.updateDirection = function(){
+    	let max = 7;
+    	let min = -1*max;
+    	if(self.timer%20===0){
+			self.speedY = Math.floor(Math.random() * (max - min)) + min;
+			self.speedX = Math.floor(Math.random() * (max - min)) + min;
+		}
+	}
+
+    self.getInitPack = function(){
+        return {
+            id:self.id,
+            x:self.x,
+            y:self.y,      
+        };
+    }
+    self.getUpdatePack = function(){
+        return {
+            id:self.id,
+            x:self.x,
+            y:self.y,      
+        };
+    }
+   
+    Point.list[self.id] = self;
+    initPack.point.push(self.getInitPack());
+    return self;
+}
+Point.list = {};
+ 
+Point.update = function(){
+    var pack = [];
+    for(var i in Point.list){
+        var point = Point.list[i];
+        point.update();
+        if(point.toRemove){
+            delete Point.list[i];
+            removePack.point.push(point.id);
+        } else
+            pack.push(point.getUpdatePack());     
+    }
+    return pack;
+}
+ 
+Point.getAllInitPack = function(){
+    var points = [];
+    for(var i in Point.list)
+        points.push(Point.list[i].getInitPack());
+    return points;
+}
+
+
+
 var DEBUG = true;
+
+
 var io = require('socket.io').listen(serv);//send data
 io.on('connection', function(socket){	//pri prihlaseni
   	socket.id=Math.random();
   	SocketList[socket.id]=socket;
 
-  	socket.on('usernameIn',function(username){
-  		console.log('user '+username+': connected');
-  		Player.onConnect(socket,username);
+  	socket.on('usernameIn',function(data){
+  		console.log('user '+data.username+': connected '+data.color);
+  		Player.onConnect(socket,data.username,data.color);
   	});
 
   	socket.on('disconnect', function(){	//pri odhlaseni
@@ -345,8 +432,19 @@ io.on('connection', function(socket){	//pri prihlaseni
 	socket.on('MsgToServer', function(msg){
 		var player = Player.list[socket.id];
 		var playerName = (""+player.name);
+		var divColor = 0;
+		if(player.color === "red")
+			divColor = "<span class=\"msg-name-red\">"
+		else if(player.color === "blue")
+			divColor = "<span class=\"msg-name-blue\">";
+		else if(player.color === "violet")
+			divColor = "<span class=\"msg-name-violet\">";
+		else if(player.color === "yellow")
+			divColor = "<span class=\"msg-name-yellow\">";
+		else if(player.color === "green")
+			divColor = "<span class=\"msg-name-green\">";
 		for(var i in SocketList){
-			SocketList[i].emit('addTextMsg',playerName + ': ' + msg);
+			SocketList[i].emit('addTextMsg',divColor + playerName + '</span>: ' + msg);
 		}
 	});
 	socket.on('evalServer', function(data){
@@ -357,12 +455,15 @@ io.on('connection', function(socket){	//pri prihlaseni
 	});
 });
 
-var initPack = {player:[]};
-var removePack = {player:[]};
+var initPack = {player:[],point:[]};
+var removePack = {player:[],point:[]};
 
 
 setInterval(function(){		//game Loop
-	var pack = {player:Player.update()};
+	var pack = {
+		player:Player.update(),
+		point:Point.update(),
+	}
 	for(var i in SocketList){	//volani vypisu newPositions v indexu
 		var socket = SocketList[i];
 		socket.emit('init',initPack)
@@ -370,5 +471,12 @@ setInterval(function(){		//game Loop
 		socket.emit('remove',removePack);
 	}
 	initPack.player = [];
+	initPack.point = [];
 	removePack.player = [];
+	removePack.point = [];
 },1000/GAMESPEED);	//snimku za sekundu
+
+setInterval(function(){
+	if(Math.floor((Math.random()*20))===1)
+		var p = Point();
+},1000);
