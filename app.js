@@ -433,9 +433,9 @@ io.on('connection', function(socket){	//pri prihlaseni
 	socket.on('MsgToServer', function(msg){
 		var player = Player.list[socket.id];
 		var playerName = (""+player.name);
-		var divColor = 0;
+		var divColor = "<span class=\"msg-name-red\">";
 		if(player.color === "red")
-			divColor = "<span class=\"msg-name-red\">"
+			divColor = "<span class=\"msg-name-red\">";
 		else if(player.color === "blue")
 			divColor = "<span class=\"msg-name-blue\">";
 		else if(player.color === "violet")
