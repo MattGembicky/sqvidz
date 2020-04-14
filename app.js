@@ -477,6 +477,6 @@ setInterval(function(){		//game Loop
 },1000/GAMESPEED);	//snimku za sekundu
 
 setInterval(function(){
-	if(Math.floor((Math.random()*20))===1)
+	if(Math.floor((Math.random()*10))===1)
 		var p = Point();
 },1000);
