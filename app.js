@@ -18,6 +18,7 @@ const WIDTH = 960;
 const HEIGHT = 960;
 const BORDERvalue = 24;
 const GAMESPEED = 40;		//snimku za sekundu
+var GAMETIMER = 0;
 
 var Entity = function(){	//zakladni objekt sveta
 	var self = {			//s pozici x,y,rychlostmi a id
@@ -460,8 +461,6 @@ var removePack = {player:[],point:[]};
 
 
 setInterval(function(){		//game Loop
-	if(Math.floor((Math.random()*40))===1)
-		var p = Point();
 	var pack = {
 		player:Player.update(),
 		point:Point.update(),
@@ -476,4 +475,13 @@ setInterval(function(){		//game Loop
 	initPack.point = [];
 	removePack.player = [];
 	removePack.point = [];
+	GAMETIMER++;
+	if(GAMETIMER===GAMESPEED*60)
+		gameloop();
 },1000/GAMESPEED);	//snimku za sekundu
+
+function gameloop(){
+	GAMETIMER=0;
+	var p = Point();
+}
+
