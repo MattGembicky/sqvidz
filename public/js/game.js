@@ -8,18 +8,23 @@
 			Img.logoB = new Image();
 			Img.background = new Image();
 			Img.point1 = new Image();
+			Img.dir1 = new Image();
+			Img.dir2 = new Image();
 
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
 			Img.player.src = '/public/img/octolia.png';
 			Img.background.src = '/public/img/background.png';
 			Img.point1.src = '/public/img/point.png';
+			Img.dir1.src = '/public/img/direction1.png';
+			Img.dir2.src = '/public/img/direction2.png';
 
 			var socket = io();
 
 			//init
 			var ctx = document.getElementById("ctx").getContext("2d");
 			var ctx2 = document.getElementById("ctx-score").getContext("2d");
+			var ctx3 = document.getElementById("ctx-info").getContext("2d");
     		ctx.font = '30px Arial';
     		ctx2.font = '30px Arial';
 
@@ -169,6 +174,7 @@
 		        for(var i in Player.list)
 		          	Player.list[i].draw();  
 		        drawScore();
+		        drawShift();
 		        timerShift--;
 		    },1000/GAMESPEED);		//game speed
 
@@ -183,6 +189,17 @@
 			    ctx2.fillText(Player.list[selfId].score,18,20);
 		    }
 		    var lastscore = null;
+
+		    var drawShift = function(){
+		    	ctx3.clearRect(0,0,200,100);
+		    	if(istate)
+		    		ctx3.drawImage(Img.dir1,0,0,Img.dir1.width,Img.dir1.height,20,20,48,48);
+		    	else
+		    		ctx3.drawImage(Img.dir2,0,0,Img.dir1.width,Img.dir1.height,20,20,48,48);
+		    }
+
+
+
     		//game movement
 			document.onkeydown = function(event){	//if key pressed
 				if(event.keyCode === 68 || event.keyCode === 39)	//Dkey or Rarrow
