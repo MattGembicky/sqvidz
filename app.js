@@ -339,8 +339,10 @@ Player.update = function(){
 var Point = function(){
     var self = Entity();
     self.id = Math.random();
-    self.speedX = Math.random()*10;
-    self.speedY = Math.random()*10; 
+    self.x = 0;
+    self.y = Math.floor(Math.random() * HEIGHT+40) -40;
+    self.speedY = Math.floor(Math.random() * 10);
+	self.speedX = Math.floor(Math.random() * 10);
     self.toRemove = false;
     self.timer = 0;
 
@@ -350,7 +352,7 @@ var Point = function(){
         self.updateDirection();
         for(var i in Player.list){
             var p = Player.list[i];
-            if(self.getDistanceTo(p) < 32){//vzdalenost //hitbox
+            if(self.getDistanceTo(p)<32){ //hitbox
                 self.toRemove = true;
                 p.score+=1;
             }
@@ -359,12 +361,14 @@ var Point = function(){
     }
 
     self.updateDirection = function(){
-    	let max = 7;
-    	let min = -1*max;
-    	if(self.timer%20===0){
+	    let max = 7;
+	    let min = -1*max;
+	    if(self.timer%20===0){
 			self.speedY = Math.floor(Math.random() * (max - min)) + min;
-			self.speedX = Math.floor(Math.random() * (max - min)) + min;
+			self.speedX = Math.floor(Math.random() * max);
 		}
+		if(self.x>WIDTH||self.x<0||self.y>HEIGHT||self.y<0)
+			self.toRemove=true;
 	}
 
     self.getInitPack = function(){
