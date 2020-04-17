@@ -10,6 +10,7 @@
 			Img.point1 = new Image();
 			Img.dir1 = new Image();
 			Img.dir2 = new Image();
+			Img.octopus = [];
 
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
@@ -18,6 +19,14 @@
 			Img.point1.src = '/public/img/point.png';
 			Img.dir1.src = '/public/img/direction1.png';
 			Img.dir2.src = '/public/img/direction2.png';
+			for(var i = 0;i<5;i++)
+				Img.octopus[i]=new Image();
+			Img.octopus[0].src = '/public/img/Red.png';
+			Img.octopus[1].src = '/public/img/Blue.png';
+			Img.octopus[2].src = '/public/img/Violet.png';
+			Img.octopus[3].src = '/public/img/Yellow.png';
+			Img.octopus[4].src = '/public/img/Green.png';
+
 
 			var socket = io();
 
@@ -40,17 +49,19 @@
 		        self.draw = function(){
 		        	var width = 64;
 		        	var height = 64;
-		        	var imgWidth = 128;
-		        	var imgHeight = 128;
+		        	var imgWidth = 512;
+		        	var imgHeight = 512;
+		        	let numberOfFrames = 48;
+		        	let color = parseInt(getCookie("color"))-1;
 		        	ctx.font = '12px Arial';
 		        	var name = self.name;
 		        	if(self.name.length>10)
 		        		name = self.name.slice(0,10);
 		        	let text = ctx.measureText(name);
 		        	ctx.fillText(name, self.x-(text.width/2), self.y-28);
-		        	ctx.drawImage(Img.player,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
+		        	ctx.drawImage(Img.octopus[color],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
 		        	self.currFrame+=0.4;
-		        	if(self.currFrame>28)
+		        	if(self.currFrame>(numberOfFrames-1))
 		        		self.currFrame=0;
 		        }
 
@@ -176,6 +187,8 @@
 		        drawScore();
 		        drawShift();
 		        timerShift--;
+		        if(wantPerk>actualPerk)
+		        	displayUpgrade();
 		    },1000/GAMESPEED);		//game speed
 
 		    var drawScore = function(){
@@ -187,6 +200,20 @@
 			    ctx2.font = '24px Arial';
 			    ctx2.fillStyle = 'white';
 			    ctx2.fillText(Player.list[selfId].score,18,20);
+			    if(Player.list[selfId].score===1){
+			    	wantPerk=2;
+			    }
+			    else if(Player.list[selfId].score===2)
+			    	wantPerk=3;
+			    else if(Player.list[selfId].score===3)
+			    	wantPerk=4;
+			    else if(Player.list[selfId].score===4)
+			    	wantPerk=5;
+			    else if(Player.list[selfId].score===5)
+			    	wantPerk=6;
+			    else if(Player.list[selfId].score===6)
+			    	wantPerk=7;
+
 		    }
 		    var lastscore = null;
 
@@ -198,7 +225,89 @@
 		    		ctx3.drawImage(Img.dir2,0,0,Img.dir1.width,Img.dir1.height,20,20,48,48);
 		    }
 
+		    function getUpgrade(race,perk,num){
+    			if(race===1){
+    				if(perk===1){
+    					vduration += 2;
+    					veffect += 1;
+    				}
+    				if(perk===2){
+    					if(num===0)
+    						vduration += 1;
+    					if(num===1){
+    						vaeduration += 1;
+    						vspeedBoost += 1;
+    					}
+    					if(num===2){
+    						vaeduration += 2;
+    						vspeedBoost += 0.5;
+    					}
+    					upgradeUsed1=num;
+    				}
+    				if(perk===4){
+    					if(num===0)
+    						vduration += 2;
+    					if(num===1)
+    						vspeedBoost += 2;
+    					if(num===2)
+    						vaeduration += 2;
+    				}
+    				if(perk===5){
+    					if(num===0)
+    						vduration = 88;//infinity
+    					if(num===0){
+    						vspeedBoost = 3;
+    						vaeduration = 3;
+    					}
+    				}
+    			}
+    			socket.emit('UpgradeToServer',{duration: vduration,aeduration: vaeduration,speedBoost: vspeedBoost,effect: veffect,effectB: veffectB});
+    			actualPerk++;
+    			hideUpgrade();
+    		}
+    		var vduration = 0;
+			var vaeduration = 0;
+			var vspeedBoost = 0;
+			var vespdBoost = 0;
+			var veffect = 0;
+			var veffectB = 0;
 
+    		var displayUpgrade = function(){
+    			if(actualPerk===1)
+    				document.getElementsByClassName("upg_sI")[0].style.display="inline-block";
+    			else if(actualPerk===2){
+    				document.getElementsByClassName("upg_sII")[0].style.display="inline-block";
+    				document.getElementsByClassName("upg_sII")[1].style.display="inline-block";
+    				document.getElementsByClassName("upg_sII")[2].style.display="inline-block";
+    			}
+    			else if(actualPerk===3){
+    				document.getElementsByClassName("upg_sII")[0].style.display="inline-block";
+    				document.getElementsByClassName("upg_sII")[1].style.display="inline-block";
+    				document.getElementsByClassName("upg_sII")[2].style.display="inline-block";
+    				document.getElementsByClassName("upg_sII")[upgradeUsed1].style.display="none";
+    			}
+    			else if(actualPerk===4){
+    				document.getElementsByClassName("upg_sIV")[0].style.display="inline-block";
+    				document.getElementsByClassName("upg_sIV")[1].style.display="inline-block";
+    				document.getElementsByClassName("upg_sIV")[2].style.display="inline-block";
+    			}
+    			else if(actualPerk===5){
+    				document.getElementsByClassName("upg_sV")[0].style.display="inline-block";
+    				document.getElementsByClassName("upg_sV")[1].style.display="inline-block";
+    			}
+    			else if(actualPerk===6)
+    				document.getElementsByClassName("upg_sVI")[0].style.display="inline-block";
+    		}
+    		var hideUpgrade = function(){
+    			let upgList = document.getElementsByClassName("upg_s").length;
+    			for(var i = 0;i<upgList;i++){
+    				document.getElementsByClassName("upg_s")[i].style.display="none";
+    			}
+    		}
+    		var actualPerk = 1;
+    		var upgradeUsed1 = 0; 
+    		var upgradeUsed2 = 0;
+    		var wantPerk = 1;
 
     		//game movement
 			document.onkeydown = function(event){	//if key pressed
@@ -218,6 +327,9 @@
 						istate=!istate;
 						timerShift=GAMESPEED*2;
 					}
+				}
+				if(event.keyCode === 69){							//E
+					socket.emit('keyPress',{inputId:'effect',state: true});
 				}
 			}
 			var istate = true;

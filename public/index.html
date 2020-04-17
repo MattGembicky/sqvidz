@@ -9,14 +9,30 @@
 	    <meta name="Author" content="Matous Gembicky">
 	    <meta name="KeyWords" content="squid, game, .io, frined, party">
 	    <meta name="Description" content="Try to slap your frined with tentacle">
-	    <script src="https://kit.fontawesome.com/53b570c0b2.js" crossorigin="anonymous"></script>
+	    <script src="https://kit.fontawesome.com/53b570c0b2.js" crossorigin="anonymous"></script> 
 	    <link rel="stylesheet" type="text/css" href="/public/sqvidz.css">
+	    <link rel="stylesheet" type="text/css" href="/public/sqvidz-static.css">
+	    <link rel="stylesheet" type="text/css" href="/public/sqvidz-loginPage.css">
+	    
 	</head>
 	<body>
 		<div class="gameParts">
 			<canvas id="ctx" width="960" height="960"></canvas>
 			<canvas id="ctx-score" width="100" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
 			<canvas id="ctx-info" width="200" height="100" style="position: absolute;left: 0;top: 0;z-index: 3;"></canvas>
+			<div class="upgrade-board">
+				<div class="upg_btn upg_mid upg_fir upg_sI upg_s" onclick="getUpgrade(1,1,1)">first</div>
+				<div class="upg_btn upg_left upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,0)">1</div>
+				<div class="upg_btn upg_mid upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,1)">2</div>
+				<div class="upg_btn upg_right upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,2)">3</div>
+
+				<div class="upg_btn upg_left upg_for upg_sIV upg_s" onclick="getUpgrade(1,4,0)">1</div>
+				<div class="upg_btn upg_mid upg_for upg_sIV upg_s" onclick="getUpgrade(1,4,1)">2</div>
+				<div class="upg_btn upg_right upg_for upg_sIV upg_s" onclick="getUpgrade(1,4,2)">3</div>
+				<div class="upg_btn upg_left upg_fif upg_sV upg_s" onclick="getUpgrade(1,5,0)">1</div>
+				<div class="upg_btn upg_right upg_fif upg_sV upg_s" onclick="getUpgrade(1,5,2)">3</div>
+				<div class="upg_btn upg_mid upg_six upg_sVI upg_s" onclick="getUpgrade(1,6,1)">2</div>
+			</div>
 			<div id="chatnlb-container">
 				<h2 style="border-top: 0;background-color: #b00e59;">Leaderboard</h2>
 					<div id="lb-box"></div>
@@ -56,36 +72,36 @@
 									<i class="pickClo fab fa-black-tie"></i><br>
 									<i class="pickClo fas fa-ring"></i>
 								</div>
-								<img class="styleMe" src="/public/img/Octalia.gif" alt="Styling" style="display: inline-flex; left: 15%; margin-top: 2em;position: relative;">
+								<img class="styleMe" src="/public/img/Octalia.gif" alt="Styling" style="display: inline-flex; left: 15%; margin-top: 2em;position: relative; width: 128px; height: 128px;">
 								<div class="pickColor">
 									<div class="control-group">
 								        <label class="control control-radio"> 
 								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator"></div>
+								            <div class="control_indicator" onclick="changeCalamari(0)"></div>
 								        </label>
 								    </div><br>
 									<div class="control-group">
 								        <label class="control control-radio">
 								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" style="background-color: #046263;"></div>
+								            <div class="control_indicator" onclick="changeCalamari(1)" style="background-color: #046263;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
 								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" style="background-color: #514d73;"></div>
+								            <div class="control_indicator" onclick="changeCalamari(2)" style="background-color: #514d73;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
 								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" style="background-color: #736c4d;"></div>
+								            <div class="control_indicator" onclick="changeCalamari(3)" style="background-color: #736c4d;"></div>
 								        </label>
 								    </div><br>
 								    <div class="control-group">
 								        <label class="control control-radio">
 								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" style="background-color: #576947;"></div>
+								            <div class="control_indicator" onclick="changeCalamari(4)" style="background-color: #576947;"></div>
 								        </label>
 								    </div>
 								</div>
@@ -119,6 +135,7 @@
 					pickswitch();
 				var i = parseInt(getCookie("color"))-1;
 				document.getElementsByClassName("colorSO")[i].checked=true;
+				changeCalamari(i);
 				if(getCookie("clicked")){
 					document.getElementsByClassName("cookieAcc")[0].style.display="none";
 					document.getElementsByTagName("body")[0].style.overflow="auto";
@@ -134,6 +151,11 @@
 					pswitch.value="SQUID";
 					pswitch.style.backgroundColor="#046263";
 				}
+			}
+
+			function changeCalamari(n){
+				let sources = ["/public/img/Red.gif","/public/img/Blue.gif","/public/img/Violet.gif","/public/img/Yellow.gif","/public/img/Green.gif"];
+				document.getElementsByClassName("styleMe")[0].src=sources[n];
 			}
 
 			document.getElementById("login-form").onsubmit = function(e){
@@ -152,6 +174,8 @@
     			document.getElementsByClassName("login")[0].style.display="none";
     			document.getElementsByClassName("gameParts")[0].style.display="block";
     		}
+
+
 		</script>
 		<script type="text/javascript" src="/public/js/game.js"></script>
 		<script type="text/javascript" src="/public/js/chat.js"></script>

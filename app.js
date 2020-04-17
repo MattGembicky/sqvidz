@@ -43,19 +43,32 @@ var Player = function(id,username,color){		//player data
 	var self = Entity();
 		self.id = id;
 		self.name = username;
+		self.speed = 5;
+		self.score = 0;
+		//keys
 		self.ready = false;			//space
 		self.invert = false;
 		self.keyRight = false;		//Rarrow or Dkey
 		self.keyLeft = false;
 		self.keyUp =false;;
 		self.keyDown =false;
-		self.speed = 5;
-		self.score = 0;
+		self.effectKey =false;
+		//mech
 		self.shot = false;
 		self.slaped = 0;
 		self.purpose = -1;
 		self.friend = 0;
 		self.angle = 0;
+		//effect
+		self.duration = 0;
+		self.aeduration = 0;
+		self.speedBoost = 0;
+		self.effect = 0;//1=stealth
+		self.effectB = 0;//1+1=moveable
+		self.delay = 0;
+		self.effetTimer = 0;
+		self.effetTimer2 = 0;
+
 		if(color===1)
 			self.color="red";
 		else if(color===2)
@@ -115,6 +128,9 @@ var Player = function(id,username,color){		//player data
 				}
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
+				self.effetTimer=0;
+				self.effetTimer2=0;
+				self.effectKey=false;
 				if(self.friend!==undefined){
 					var matcher = 0;
 					for(var i in Player.list){
@@ -201,7 +217,30 @@ var Player = function(id,username,color){		//player data
 			self.speed = 5;
 
 		}
-	}
+
+		if(self.effectKey&&self.effetTimer===0&&self.delay===0&&self.slaped===0){
+			self.effetTimer=self.duration*GAMESPEED;
+			self.effectKey=false;
+		}
+
+		if(self.effetTimer>0){
+			self.effetTimer--;
+			if(self.effect===1){
+				self.purpose=10;
+			}
+			if(self.effetTimer===0||self.effectKey){
+				self.effetTimer=0;
+				self.purpose=-1;
+				self.effetTimer2=self.aeduration*GAMESPEED;
+				//self.delay=GAMESPEED*60;
+			}
+		}
+		if(self.effetTimer2>GAMESPEED){
+			self.speed+=self.speedBoost;
+			self.effetTimer2--;
+		}
+
+	}//end
 
 	self.updateSpeed = function(){	//pohyb a zaroven border
 		if(self.shot==false){
@@ -269,6 +308,7 @@ var Player = function(id,username,color){		//player data
 			y:self.y,
 			ready:self.ready,
 			score:self.score,
+			color:self.color,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -306,6 +346,8 @@ Player.onConnect = function(socket,username,color){
   			player.ready = data.state;
   		if(data.inputId==='shift')
   			player.invert = data.state;
+  		if(data.inputId==='effect')
+  			player.effectKey = data.state;
 	});
 
 	socket.emit('init',{
@@ -452,6 +494,16 @@ io.on('connection', function(socket){	//pri prihlaseni
 			SocketList[i].emit('addTextMsg',divColor + playerName + '</span>: ' + msg);
 		}
 	});
+
+	socket.on('UpgradeToServer', function(upgrade){
+		var player = Player.list[socket.id];
+		player.duration = upgrade.duration;
+		player.aeduration = upgrade.aeduration;
+		player.speedBoost = upgrade.speedBoost;
+		player.effect = upgrade.effect;
+		player.effectB = upgrade.effectB;
+	});
+
 	socket.on('evalServer', function(data){
 		if(!DEBUG)
 			return;
@@ -480,7 +532,7 @@ setInterval(function(){		//game Loop
 	removePack.player = [];
 	removePack.point = [];
 	GAMETIMER++;
-	if(GAMETIMER===(GAMESPEED*60))
+	if(GAMETIMER===(GAMESPEED*0.5))
 		gameloop();
 },1000/GAMESPEED);	//snimku za sekundu
 
