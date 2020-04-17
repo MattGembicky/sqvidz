@@ -45,6 +45,7 @@
 		        self.y = initPack.y;
 		        self.score = initPack.score;
 		        self.currFrame = 0;
+		        self.color = initPack.color;
 
 		        self.draw = function(){
 		        	var width = 64;
@@ -52,14 +53,25 @@
 		        	var imgWidth = 512;
 		        	var imgHeight = 512;
 		        	let numberOfFrames = 48;
-		        	let color = parseInt(getCookie("color"))-1;
+		        	let colorOf = 0;
+		        	if(self.color==="red")
+						colorOf = 0;
+		        	else if(self.color==="blue")
+		        		colorOf = 1;
+		        	else if(self.color==="violet")
+		        		colorOf = 2;
+		        	else if(self.color==="yellow")
+		        		colorOf = 3;
+		        	else if(self.color==="green")
+		        		colorOf = 4;
+
 		        	ctx.font = '12px Arial';
 		        	var name = self.name;
 		        	if(self.name.length>10)
 		        		name = self.name.slice(0,10);
 		        	let text = ctx.measureText(name);
 		        	ctx.fillText(name, self.x-(text.width/2), self.y-28);
-		        	ctx.drawImage(Img.octopus[color],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
+		        	ctx.drawImage(Img.octopus[colorOf],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
 		        	self.currFrame+=0.4;
 		        	if(self.currFrame>(numberOfFrames-1))
 		        		self.currFrame=0;
