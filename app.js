@@ -545,7 +545,7 @@ setInterval(function(){		//game Loop
 	removePack.player = [];
 	removePack.point = [];
 	GAMETIMER++;
-	if(GAMETIMER===(GAMESPEED*0.5))
+	if(GAMETIMER===(GAMESPEED*10))
 		gameloop();
 },1000/GAMESPEED);	//snimku za sekundu
 
