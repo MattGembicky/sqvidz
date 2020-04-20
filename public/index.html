@@ -131,7 +131,7 @@
 				else
 					tentacle.src ="/public/img/red_tentacle.png";
 				document.getElementsByClassName("name-box")[0].value=getCookie("username");
-				if(getCookie("type")===0)
+				if(getCookie("type")===1)
 					pickswitch();
 				var i = parseInt(getCookie("color"))-1;
 				document.getElementsByClassName("colorSO")[i].checked=true;
@@ -147,21 +147,21 @@
 				if(pswitch.value==="SQUID"){
 					pswitch.value="OCTOPUS";
 					pswitch.style.backgroundColor="#b00e59";
-					calamari=0;
+					CALAMARI=0;
 				}
 				else{
 					pswitch.value="SQUID";
 					pswitch.style.backgroundColor="#046263";
-					calamari=1;
+					CALAMARI=1;
 				}
 			}
 
 			function changeCalamari(n){
 				let sources = ["/public/img/Red.gif","/public/img/Blue.gif","/public/img/Violet.gif","/public/img/Yellow.gif","/public/img/Green.gif"];
-				if(calamari===0)
+				if(CALAMARI===0)
 					document.getElementsByClassName("styleMe")[0].src=sources[n];
 			}
-			var calamari = 0;
+			var CALAMARI = 0;
 
 			document.getElementById("login-form").onsubmit = function(e){
     			e.preventDefault();
@@ -171,10 +171,10 @@
     			for(var i = 0;i<5;i++)
     				if(document.getElementsByClassName("colorSO")[i].checked)
     					chosen = i+1;
-    			socket.emit('usernameIn',{username: nameBox.value ,color: chosen, calamari: calamari});
+    			socket.emit('usernameIn',{username: nameBox.value ,color: chosen, calamari: CALAMARI});
     			setCookie("username",nameBox.value,30);
     			setCookie("color",chosen,30);
-    			setCookie("type",calamari,30);
+    			setCookie("type",CALAMARI,30);
     			setCookie('clicked',true,30);
     			document.getElementsByClassName("login")[0].style.display="none";
     			document.getElementsByClassName("gameParts")[0].style.display="block";
