@@ -46,12 +46,14 @@
 		        self.score = initPack.score;
 		        self.currFrame = 0;
 		        self.color = initPack.color;
+		        self.calamari = initPack.calamari;
+		        self.special = 0;
 
 		        self.draw = function(){
-		        	var width = 64;
-		        	var height = 64;
-		        	var imgWidth = 512;
-		        	var imgHeight = 512;
+		        	let pWidth = 64;
+		        	let pHeight = 64;
+		        	let imgWidth = 512;
+		        	let imgHeight = 512;
 		        	let numberOfFrames = 48;
 		        	let colorOf = 0;
 		        	if(self.color==="red")
@@ -64,14 +66,21 @@
 		        		colorOf = 3;
 		        	else if(self.color==="green")
 		        		colorOf = 4;
-
 		        	ctx.font = '12px Arial';
-		        	var name = self.name;
+		        	let name = self.name;
 		        	if(self.name.length>10)
 		        		name = self.name.slice(0,10);
 		        	let text = ctx.measureText(name);
-		        	ctx.fillText(name, self.x-(text.width/2), self.y-28);
-		        	ctx.drawImage(Img.octopus[colorOf],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-width/2,self.y-height/2,width,height);
+		        	let pImage = Img.octopus[colorOf];
+		        	if(self.calamari===1)
+		        		pImage = Img.player;
+
+		        	if(self.special!==1){
+		        		ctx.fillText(name, self.x-(text.width/2), self.y-30);//name
+		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
+		        	}else if(selfId===self.id)
+		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
+
 		        	self.currFrame+=0.4;
 		        	if(self.currFrame>(numberOfFrames-1))
 		        		self.currFrame=0;
@@ -125,6 +134,8 @@
 		                    p.y = pack.y;
 		                if(pack.score !== undefined)
 		                    p.score = pack.score;
+		                if(pack.special !== undefined)
+		                	p.special = pack.special;
 		            }
 		        }
 		        for(var i = 0 ; i < data.point.length; i++){
@@ -340,12 +351,14 @@
 						timerShift=GAMESPEED*2;
 					}
 				}
-				if(event.keyCode === 69){							//E
+				if(event.keyCode === 69&&eClick){							//E
 					socket.emit('keyPress',{inputId:'effect',state: true});
+					eClick = false;
 				}
 			}
 			var istate = true;
 			var timerShift = 0;
+			var eClick = true;
 
 			document.onkeyup = function(event){	//if key released
 				if(event.keyCode === 68 || event.keyCode === 39)	//Dkey or Rarrow
@@ -358,4 +371,7 @@
 					socket.emit('keyPress',{inputId:'down',state: false});
 				if(event.keyCode === 32)						//Spacebar
 					socket.emit('keyPress',{inputId:'space',state: false});
+				if(event.keyCode === 69){							//E
+					eClick = true;
+				}
 			}

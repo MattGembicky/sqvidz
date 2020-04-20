@@ -39,7 +39,7 @@ var Entity = function(){	//zakladni objekt sveta
 	return self;
 }
 
-var Player = function(id,username,color){		//player data
+var Player = function(id,username,color,calamari){		//player data
 	var self = Entity();
 		self.id = id;
 		self.name = username;
@@ -68,7 +68,8 @@ var Player = function(id,username,color){		//player data
 		self.delay = 0;
 		self.effetTimer = 0;
 		self.effetTimer2 = 0;
-
+		//style
+		self.calamari = calamari;
 		if(color===1)
 			self.color="red";
 		else if(color===2)
@@ -79,6 +80,7 @@ var Player = function(id,username,color){		//player data
 			self.color="yellow";
 		else if(color===5)
 			self.color="green";
+
 
 		if(self.name==='aaa')		//smazat
 		    self.score=1;
@@ -98,7 +100,7 @@ var Player = function(id,username,color){		//player data
 			var other = Player.list[i];
 			var distance = self.getDistanceTo(other);
 			if(distance<64&&other.id!==self.id&&self.slaped===0&&other.slaped===0){//kdyz vzdalenost a jine id 
-				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){//zjisteni zda uz nemaji ukol > priradi/*&& self.ready === true*/
+				if(self.purpose===-1&&other.purpose===-1&& other.ready == true&&other.shot==false&&self.shot==false){
 					var rng = Math.floor(Math.random() * 1)+0;
 					self.purpose = rng;
 					var bangle = Math.atan2(other.y - self.y, other.x - self.x);
@@ -145,7 +147,7 @@ var Player = function(id,username,color){		//player data
 			}
 		}
 
-		if(self.purpose>-1){
+		if(self.purpose>-1){//odpojeni pri toceni
 			var control = false;
 			for(var i in Player.list){
 				var other = Player.list[i];
@@ -156,6 +158,8 @@ var Player = function(id,username,color){		//player data
 				self.friend=0;
 				self.purpose=-1;
 			}
+			self.effetTimer=0;
+			self.effetTimer2=0;
 		}	
 
 		if(self.purpose===1&&self.slaped<=GAMESPEED){//tocici se
@@ -217,6 +221,9 @@ var Player = function(id,username,color){		//player data
 			self.speed = 5;
 
 		}
+		if(self.delay>0){
+			self.delay--;
+		}
 
 		if(self.effectKey&&self.effetTimer===0&&self.delay===0&&self.slaped===0){
 			self.effetTimer=self.duration*GAMESPEED;
@@ -225,14 +232,10 @@ var Player = function(id,username,color){		//player data
 
 		if(self.effetTimer>0){
 			self.effetTimer--;
-			if(self.effect===1){
-				self.purpose=10;
-			}
 			if(self.effetTimer===0||self.effectKey){
 				self.effetTimer=0;
-				self.purpose=-1;
 				self.effetTimer2=self.aeduration*GAMESPEED;
-				//self.delay=GAMESPEED*60;
+				self.delay=GAMESPEED*10;//upravit
 			}
 		}
 		if(self.effetTimer2>GAMESPEED){
@@ -309,9 +312,14 @@ var Player = function(id,username,color){		//player data
 			ready:self.ready,
 			score:self.score,
 			color:self.color,
+			calamari:self.calamari,
 		};
 	}
 	self.getUpdatePack = function(){
+		let Special = 0;
+		if(self.effetTimer>0)
+			if(self.effect===1)
+				Special = 1;	
 		return{
 			id:self.id,
 			name:self.name,
@@ -320,6 +328,7 @@ var Player = function(id,username,color){		//player data
 			ready:self.ready,
 			invert:self.invert,
 			score:self.score,
+			special:Special,
 		};
 	}
 
@@ -331,8 +340,8 @@ var Player = function(id,username,color){		//player data
 
 Player.list = {};
 
-Player.onConnect = function(socket,username,color){
-	var player = Player(socket.id,username,color);		//pri pripojeni vytvori hrace
+Player.onConnect = function(socket,username,color,calamari){
+	var player = Player(socket.id,username,color,calamari);		//pri pripojeni vytvori hrace
 	socket.on('keyPress', function(data){	//pri zmacknuti od clienta
   		if(data.inputId==='right')
   			player.keyRight = data.state;
@@ -346,7 +355,7 @@ Player.onConnect = function(socket,username,color){
   			player.ready = data.state;
   		if(data.inputId==='shift')
   			player.invert = data.state;
-  		if(data.inputId==='effect')
+  		if(data.inputId==='effect'&&player.delay===0)
   			player.effectKey = data.state;
 	});
 
@@ -377,6 +386,10 @@ Player.update = function(){
     }
     return pack;
 }
+
+
+
+
 
 var Point = function(){
     var self = Entity();
@@ -466,8 +479,8 @@ io.on('connection', function(socket){	//pri prihlaseni
   	SocketList[socket.id]=socket;
 
   	socket.on('usernameIn',function(data){
-  		console.log('user '+data.username+': connected '+data.color);
-  		Player.onConnect(socket,data.username,data.color);
+  		console.log('user '+data.username+': connected '+data.calamari+data.color);
+  		Player.onConnect(socket,data.username,data.color,data.calamari);
   	});
 
   	socket.on('disconnect', function(){	//pri odhlaseni
