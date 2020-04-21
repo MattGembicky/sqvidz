@@ -81,15 +81,16 @@ var Player = function(id,username,color,calamari){		//player data
 		else if(color===5)
 			self.color="green";
 
-
-		if(self.name==='aaa')		//smazat
-		    self.score=1;
-		if(self.name==='bbb')
-		    self.score=2;
-		if(self.name==='ccc')
-		    self.score=3;
-		if(self.name==='a')
-			self.shot=true;
+		if(DEBUG){
+			if(self.name==='aaa')		//smazat
+			    self.score=1;
+			if(self.name==='bbb')
+			    self.score=2;
+			if(self.name==='ccc')
+			    self.score=3;
+			if(self.name==='mmm'||self.name==='rrr')
+				self.score=1000;
+		}
 
 	var super_update = self.update;
 	self.update = function(){
@@ -222,9 +223,10 @@ var Player = function(id,username,color,calamari){		//player data
 
 		}
 		if(self.delay>0){
+			if(self.delay===1)//aktivace jen kdyz je nabity
+				self.effectKey=false;
 			self.delay--;
 		}
-
 		if(self.effectKey&&self.effetTimer===0&&self.delay===0&&self.slaped===0){
 			self.effetTimer=self.duration*GAMESPEED;
 			self.effectKey=false;
@@ -233,13 +235,16 @@ var Player = function(id,username,color,calamari){		//player data
 		if(self.effetTimer>0){
 			self.effetTimer--;
 			if(self.effetTimer===0||self.effectKey){
+				self.effectKey=false;
 				self.effetTimer=0;
 				self.effetTimer2=self.aeduration*GAMESPEED;
-				self.delay=GAMESPEED*10;//upravit
+				self.delay=GAMESPEED*10;
 			}
 		}
-		if(self.effetTimer2>GAMESPEED){
+		if(self.effetTimer2>0){
 			self.speed+=self.speedBoost;
+			if(self.effetTimer2===1)
+				self.delay=GAMESPEED*10;//upravit
 			self.effetTimer2--;
 		}
 
@@ -355,7 +360,7 @@ Player.onConnect = function(socket,username,color,calamari){
   			player.ready = data.state;
   		if(data.inputId==='shift')
   			player.invert = data.state;
-  		if(data.inputId==='effect'&&player.delay===0)
+  		if(data.inputId==='effect')
   			player.effectKey = data.state;
 	});
 
@@ -396,10 +401,14 @@ var Point = function(){
     self.id = Math.random();
     self.x = 0;
     self.y = Math.floor(Math.random() * HEIGHT+40) -40;
-    self.speedY = Math.floor(Math.random() * 10);
-	self.speedX = Math.floor(Math.random() * 10);
+    self.speedY = 0;
+	self.speedX = 0;
     self.toRemove = false;
     self.timer = 0;
+    self.angle = 0;
+    self.value = Math.floor(Math.random()*10)+1;
+    if(self.value<10)
+    	self.value=1;
 
     var super_update = self.update;
     self.update = function(){
@@ -409,18 +418,18 @@ var Point = function(){
             var p = Player.list[i];
             if(self.getDistanceTo(p)<32){ //hitbox
                 self.toRemove = true;
-                p.score+=1;
+                p.score+=self.value;
             }
         }
         self.timer++;
     }
 
     self.updateDirection = function(){
-	    let max = 7;
-	    let min = -1*max;
+	    let speed = Math.floor(Math.random()*(7-3))+3;
 	    if(self.timer%20===0){
-			self.speedY = Math.floor(Math.random() * (max - min)) + min;
-			self.speedX = Math.floor(Math.random() * max);
+	    	self.angle = Math.random()*Math.PI+(3/2*Math.PI);
+			self.speedX = Math.cos(self.angle)*speed;
+			self.speedY = Math.sin(self.angle)*speed;
 		}
 		if(self.x>WIDTH||self.x<0||self.y>HEIGHT||self.y<0)
 			self.toRemove=true;
@@ -430,14 +439,16 @@ var Point = function(){
         return {
             id:self.id,
             x:self.x,
-            y:self.y,      
+            y:self.y,
+            color:self.value,      
         };
     }
     self.getUpdatePack = function(){
         return {
             id:self.id,
             x:self.x,
-            y:self.y,      
+            y:self.y,
+            angle:self.angle,  
         };
     }
    
@@ -545,7 +556,7 @@ setInterval(function(){		//game Loop
 	removePack.player = [];
 	removePack.point = [];
 	GAMETIMER++;
-	if(GAMETIMER===(GAMESPEED*10))
+	if(GAMETIMER===(GAMESPEED*2))
 		gameloop();
 },1000/GAMESPEED);	//snimku za sekundu
 

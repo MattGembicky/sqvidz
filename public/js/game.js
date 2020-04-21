@@ -11,6 +11,8 @@
 			Img.dir1 = new Image();
 			Img.dir2 = new Image();
 			Img.octopus = [];
+			Img.shrimp = new Image();
+			Img.shrimpG = new Image();
 
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
@@ -19,13 +21,17 @@
 			Img.point1.src = '/public/img/point.png';
 			Img.dir1.src = '/public/img/direction1.png';
 			Img.dir2.src = '/public/img/direction2.png';
-			for(var i = 0;i<5;i++)
+			Img.shrimp.src = '/public/img/blackTigerShrimp.png';
+			Img.shrimpG.src = '/public/img/blackTigerShrimpGolden.png';
+
+			for(var i = 0;i<6;i++)
 				Img.octopus[i]=new Image();
 			Img.octopus[0].src = '/public/img/Red.png';
 			Img.octopus[1].src = '/public/img/Blue.png';
 			Img.octopus[2].src = '/public/img/Violet.png';
 			Img.octopus[3].src = '/public/img/Yellow.png';
 			Img.octopus[4].src = '/public/img/Green.png';
+			Img.octopus[5].src = '/public/img/Stealth.png';
 
 
 			var socket = io();
@@ -73,13 +79,13 @@
 		        	let text = ctx.measureText(name);
 		        	let pImage = Img.octopus[colorOf];
 		        	if(self.calamari===1)
-		        		pImage = Img.player;
+		        		pImage = Img.octopus[5];//squid
 
 		        	if(self.special!==1){
 		        		ctx.fillText(name, self.x-(text.width/2), self.y-30);//name
 		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
 		        	}else if(selfId===self.id)
-		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
+		        		ctx.drawImage(Img.octopus[5],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
 
 		        	self.currFrame+=0.4;
 		        	if(self.currFrame>(numberOfFrames-1))
@@ -97,10 +103,28 @@
 		        self.id = initPack.id;
         		self.x = initPack.x;
         		self.y = initPack.y;
+        		self.angle = 0;
+        		self.currFrame = 0;
+        		self.color = initPack.color;
+
 
 		        self.draw = function(){
-		        	ctx.drawImage(Img.point1,0,0,32,32,self.x,self.y,16,16);
+		        	let sImage = Img.shrimp;
+		        	if(self.color===10)
+		        		sImage = Img.shrimpG;
+
+		        	ctx.save();
+		        	ctx.translate(self.x,self.y);
+		        	ctx.rotate(self.angle);
+		        	ctx.translate(-self.x,-self.y);
+		        	ctx.drawImage(sImage,Math.floor(self.currFrame)*48,0,48,32,self.x-20,self.y-12,40,24);
+		        	ctx.restore();
+
+		        	self.currFrame+=0.5;
+		        	if(self.currFrame>(1.9))
+		        		self.currFrame=0;
 		        }
+		        //Math.floor(self.currFrame)*40//
 
 		        Point.list[self.id] = self;
 		        return self;
@@ -146,6 +170,8 @@
 		                    s.x = pack.x;
 		                if(pack.y !== undefined)
 		                    s.y = pack.y;
+		                if(pack.angle !== undefined)
+		                	s.angle = pack.angle;
 		            }
 		        }
 		        leaderupdate(data);
@@ -173,12 +199,12 @@
 		        	}
 		        }
 		        var text = "";
-		        for(var k = 0; k < 10; k++){
+		        for(var k = 0; k < 9; k++){
 		        	if(lbScore[k]==undefined)
 		        		break;
-		        	if(lbPlayer[k].length<13){
+		        	if(lbPlayer[k].length<12){
 				        text += (k+1)+'. '+lbPlayer[k];
-				        for(var i = 1; i < (15-lbPlayer[k].length); i++)
+				        for(var i = 1; i < (14-lbPlayer[k].length); i++)
 					        text += '..';
 					}
 					else
@@ -223,20 +249,19 @@
 			    ctx2.font = '24px Arial';
 			    ctx2.fillStyle = 'white';
 			    ctx2.fillText(Player.list[selfId].score,18,20);
-			    if(Player.list[selfId].score===1){
-			    	wantPerk=2;
-			    }
-			    else if(Player.list[selfId].score===2)
-			    	wantPerk=3;
-			    else if(Player.list[selfId].score===3)
-			    	wantPerk=4;
-			    else if(Player.list[selfId].score===4)
-			    	wantPerk=5;
-			    else if(Player.list[selfId].score===5)
-			    	wantPerk=6;
-			    else if(Player.list[selfId].score===6)
-			    	wantPerk=7;
 
+			    if(Player.list[selfId].score>=60)
+			    	wantPerk=7;
+			    else if(Player.list[selfId].score>=45)
+			    	wantPerk=6;
+			    else if(Player.list[selfId].score>=30)
+			    	wantPerk=5;
+			    else if(Player.list[selfId].score>=15)
+			    	wantPerk=4;
+			    else if(Player.list[selfId].score>=5)
+			    	wantPerk=3;
+			    else if(Player.list[selfId].score>=1)
+			    	wantPerk=2;
 		    }
 		    var lastscore = null;
 
