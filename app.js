@@ -230,7 +230,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 				self.effectKey=false;
 			self.delay--;
 		}
-		if(self.effectKey&&self.effetTimer===0&&self.delay===0&&self.slaped===0){
+		if(self.effectKey&&self.effetTimer===0&&self.effetTimer2===0&&self.delay===0&&self.slaped===0){
 			self.effetTimer=self.duration*GAMESPEED;
 			self.effectKey=false;
 		}
@@ -244,7 +244,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 					self.effetTimer2=self.aeduration*GAMESPEED;
 				}
 				else
-					self.delay=GAMESPEED*10;
+					self.delay=GAMESPEED*10;aaaaa
 			}
 		}
 		if(self.effetTimer2>0){
