@@ -39,7 +39,7 @@ var Entity = function(){	//zakladni objekt sveta
 	return self;
 }
 
-var Player = function(id,username,color,calamari){		//player data
+var Player = function(id,username,color,calamari,hat,dress){		//player data
 	var self = Entity();
 		self.id = id;
 		self.name = username;
@@ -70,6 +70,8 @@ var Player = function(id,username,color,calamari){		//player data
 		self.effetTimer2 = 0;
 		//style
 		self.calamari = calamari;
+		self.hat = hat;
+		self.dress = dress;
 		if(color===1)
 			self.color="red";
 		else if(color===2)
@@ -134,6 +136,7 @@ var Player = function(id,username,color,calamari){		//player data
 				self.effetTimer=0;
 				self.effetTimer2=0;
 				self.effectKey=false;
+				self.delay=GAMESPEED*10;
 				if(self.friend!==undefined){
 					var matcher = 0;
 					for(var i in Player.list){
@@ -237,8 +240,11 @@ var Player = function(id,username,color,calamari){		//player data
 			if(self.effetTimer===0||self.effectKey){
 				self.effectKey=false;
 				self.effetTimer=0;
-				self.effetTimer2=self.aeduration*GAMESPEED;
-				self.delay=GAMESPEED*10;
+				if(self.aeduration>0){
+					self.effetTimer2=self.aeduration*GAMESPEED;
+				}
+				else
+					self.delay=GAMESPEED*10;
 			}
 		}
 		if(self.effetTimer2>0){
@@ -318,6 +324,8 @@ var Player = function(id,username,color,calamari){		//player data
 			score:self.score,
 			color:self.color,
 			calamari:self.calamari,
+			hat:self.hat,
+			dress:self.dress,
 		};
 	}
 	self.getUpdatePack = function(){
@@ -334,6 +342,7 @@ var Player = function(id,username,color,calamari){		//player data
 			invert:self.invert,
 			score:self.score,
 			special:Special,
+			delay:self.delay,
 		};
 	}
 
@@ -345,8 +354,8 @@ var Player = function(id,username,color,calamari){		//player data
 
 Player.list = {};
 
-Player.onConnect = function(socket,username,color,calamari){
-	var player = Player(socket.id,username,color,calamari);		//pri pripojeni vytvori hrace
+Player.onConnect = function(socket,username,color,calamari,hat,dress){
+	var player = Player(socket.id,username,color,calamari,hat,dress);		//pri pripojeni vytvori hrace
 	socket.on('keyPress', function(data){	//pri zmacknuti od clienta
   		if(data.inputId==='right')
   			player.keyRight = data.state;
@@ -491,7 +500,7 @@ io.on('connection', function(socket){	//pri prihlaseni
 
   	socket.on('usernameIn',function(data){
   		console.log('user '+data.username+': connected '+data.calamari+data.color);
-  		Player.onConnect(socket,data.username,data.color,data.calamari);
+  		Player.onConnect(socket,data.username,data.color,data.calamari,data.hat,data.dress);
   	});
 
   	socket.on('disconnect', function(){	//pri odhlaseni

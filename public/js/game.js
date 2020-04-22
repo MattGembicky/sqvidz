@@ -13,6 +13,9 @@
 			Img.octopus = [];
 			Img.shrimp = new Image();
 			Img.shrimpG = new Image();
+			Img.timer = new Image();
+			Img.hat = [];
+			Img.dress = [];
 
 			Img.logoR.src = '/public/img/red_tentacle.png';
 			Img.logoB.src = '/public/img/blue_tentacle.png';
@@ -23,6 +26,7 @@
 			Img.dir2.src = '/public/img/direction2.png';
 			Img.shrimp.src = '/public/img/blackTigerShrimp.png';
 			Img.shrimpG.src = '/public/img/blackTigerShrimpGolden.png';
+			Img.timer.src = '/public/img/timer.png';
 
 			for(var i = 0;i<6;i++)
 				Img.octopus[i]=new Image();
@@ -33,6 +37,12 @@
 			Img.octopus[4].src = '/public/img/Green.png';
 			Img.octopus[5].src = '/public/img/Stealth.png';
 
+			for(var i = 0;i<1;i++)
+				Img.hat[i]=new Image();
+			Img.hat[0].src = '/public/img/cowboy.png';
+			for(var i = 0;i<1;i++)
+				Img.dress[i]=new Image();
+			Img.dress[0].src = '/public/img/cowboy_guns.png';
 
 			var socket = io();
 
@@ -54,6 +64,9 @@
 		        self.color = initPack.color;
 		        self.calamari = initPack.calamari;
 		        self.special = 0;
+		        self.delay = 0;
+		        self.hat = initPack.hat;
+		        self.dress = initPack.dress;
 
 		        self.draw = function(){
 		        	let pWidth = 64;
@@ -80,10 +93,19 @@
 		        	let pImage = Img.octopus[colorOf];
 		        	if(self.calamari===1)
 		        		pImage = Img.octopus[5];//squid
+		        	let pIcon = false;
+		        	if(self.delay>0)
+		        		pIcon = Img.timer;
 
 		        	if(self.special!==1){
-		        		ctx.fillText(name, self.x-(text.width/2), self.y-30);//name
 		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
+		        		if(self.hat!==1)
+		        			ctx.drawImage(Img.hat[self.hat],0,0,64,32,self.x-32,self.y-48,64,32);
+		        		if(self.dress!==1)
+		        			ctx.drawImage(Img.dress[self.hat],0,0,64,32,self.x-32,self.y-10,64,32);
+		        		ctx.fillText(name, self.x-(text.width/2), self.y-42);//name
+		        		if(pIcon)
+		        			ctx.drawImage(pIcon,0,0,32,32,self.x-(text.width/2)-20,self.y-54,16,16);
 		        	}else if(selfId===self.id)
 		        		ctx.drawImage(Img.octopus[5],Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
 
@@ -160,6 +182,8 @@
 		                    p.score = pack.score;
 		                if(pack.special !== undefined)
 		                	p.special = pack.special;
+		                if(pack.delay !== undefined)
+		                	p.delay = pack.delay;
 		            }
 		        }
 		        for(var i = 0 ; i < data.point.length; i++){
@@ -271,6 +295,10 @@
 		    		ctx3.drawImage(Img.dir1,0,0,Img.dir1.width,Img.dir1.height,20,20,48,48);
 		    	else
 		    		ctx3.drawImage(Img.dir2,0,0,Img.dir1.width,Img.dir1.height,20,20,48,48);
+		    	ctx3.font = '32px Arial';
+			    ctx3.fillStyle = 'white';
+			    let text = Math.floor(Player.list[selfId].delay/GAMESPEED);;
+			    ctx3.fillText(text,80,56);
 		    }
 
 		    function getUpgrade(race,perk,num){

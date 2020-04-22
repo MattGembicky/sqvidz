@@ -5,15 +5,15 @@
 		<link rel="icon" type="image/png" href="/public/img/red_tentacle.png" size="16x16 32x32">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-	    <meta name="Content-Language" content="cs">
-	    <meta name="Author" content="Matous Gembicky">
-	    <meta name="KeyWords" content="squid, game, .io, frined, party">
-	    <meta name="Description" content="Try to slap your frined with tentacle">
-	    <script src="https://kit.fontawesome.com/53b570c0b2.js" crossorigin="anonymous"></script> 
-	    <link rel="stylesheet" type="text/css" href="/public/sqvidz.css">
-	    <link rel="stylesheet" type="text/css" href="/public/sqvidz-static.css">
-	    <link rel="stylesheet" type="text/css" href="/public/sqvidz-loginPage.css">
-	    
+		<meta name="Content-Language" content="cs">
+		<meta name="Author" content="Matous Gembicky">
+		<meta name="KeyWords" content="squid, game, .io, frined, party">
+		<meta name="Description" content="Try to slap your frined with tentacle">
+		<script src="https://kit.fontawesome.com/53b570c0b2.js" crossorigin="anonymous"></script> 
+		<link rel="stylesheet" type="text/css" href="/public/sqvidz.css">
+		<link rel="stylesheet" type="text/css" href="/public/sqvidz-static.css">
+		<link rel="stylesheet" type="text/css" href="/public/sqvidz-loginPage.css">
+		
 	</head>
 	<body onload="webLoaded()">
 		<div class="gameParts">
@@ -68,42 +68,60 @@
 							<form id="pick-form">
 								<input type="button" class="pickSwitch" name="so" value="OCTOPUS" onclick="pickswitch()">
 								<div class="pickClothing">
-									<i class="pickClo fas fa-hat-cowboy"></i><br>
-									<i class="pickClo fab fa-black-tie"></i><br>
+									<i class="pickClo fas fa-hat-cowboy" onclick="displayClothes(0)"></i><br>
+										<div class="lister">
+											<div class="listerheader"></div>
+											<i class="fas fa-chevron-left" onclick="hatchange(-1)"></i>
+												<img class="hats" src="/public/img/cowboy.png">
+												<img class="hats" src="/public/img/none.png" style="border-bottom: 2px solid #000000; padding-bottom: 2px;">
+												<img class="hats" src="/public/img/cowboy.png">
+											<i class="fas fa-chevron-right" onclick="hatchange(1)"></i>
+										</div>
+									<i class="pickClo fab fa-black-tie" onclick="displayClothes(1)"></i><br>
+										<div class="lister">
+											<div class="listerheader"></div>
+											<i class="fas fa-chevron-left" onclick="dresschange(-1)"></i>
+												<img class="dress" src="/public/img/cowboy_guns.png">
+												<img class="dress" src="/public/img/none.png" style="border-bottom: 2px solid #000000; padding-bottom: 2px;">
+												<img class="dress" src="/public/img/cowboy_guns.png">
+											<i class="fas fa-chevron-right" onclick="dresschange(1)"></i>
+										</div>
 									<i class="pickClo fas fa-ring"></i>
 								</div>
-								<img class="styleMe" src="/public/img/Octalia.gif" alt="Styling" style="display: inline-flex; left: 15%; margin-top: 2em;position: relative; width: 128px; height: 128px;">
+								<img class="styleMeHat" src="" style="position: absolute; z-index: 10; width: 128px; top: 3.5em; left: 50%; transform: translate(-50%,0);">
+								<img class="styleMe" src="/public/img/Octalia.gif" alt="Styling" style="position: absolute; z-index: 9; width: 128px; top: 5.5em; left: 50%; transform: translate(-50%,0); height: 128px;">
+								<img class="styleMeDress" src="" style="position: absolute; z-index: 10; width: 128px; top: 8.2em; left: 50%; transform: translate(-50%,0);">
 								<div class="pickColor">
 									<div class="control-group">
-								        <label class="control control-radio"> 
-								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" onclick="changeCalamari(0)"></div>
-								        </label>
-								    </div><br>
+										<label class="control control-radio"> 
+											<input class="colorSO" type="radio" name="colorch" />
+											<div class="control_indicator" onclick="changeCalamari(0)"></div>
+										</label>
+									</div><br>
 									<div class="control-group">
-								        <label class="control control-radio">
-								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" onclick="changeCalamari(1)" style="background-color: #046263;"></div>
-								        </label>
-								    </div><br>
-								    <div class="control-group">
-								        <label class="control control-radio">
-								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" onclick="changeCalamari(2)" style="background-color: #514d73;"></div>
-								        </label>
-								    </div><br>
-								    <div class="control-group">
-								        <label class="control control-radio">
-								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" onclick="changeCalamari(3)" style="background-color: #736c4d;"></div>
-								        </label>
-								    </div><br>
-								    <div class="control-group">
-								        <label class="control control-radio">
-								            <input class="colorSO" type="radio" name="radio" />
-								            <div class="control_indicator" onclick="changeCalamari(4)" style="background-color: #576947;"></div>
-								        </label>
-								    </div>
+										<label class="control control-radio">
+											<input class="colorSO" type="radio" name="colorch" />
+											<div class="control_indicator" onclick="changeCalamari(1)" style="background-color: #046263;"></div>
+										</label>
+									</div><br>
+									<div class="control-group">
+										<label class="control control-radio">
+											<input class="colorSO" type="radio" name="colorch" />
+											<div class="control_indicator" onclick="changeCalamari(2)" style="background-color: #514d73;"></div>
+										</label>
+									</div><br>
+									<div class="control-group">
+										<label class="control control-radio">
+											<input class="colorSO" type="radio" name="colorch" />
+											<div class="control_indicator" onclick="changeCalamari(3)" style="background-color: #736c4d;"></div>
+										</label>
+									</div><br>
+									<div class="control-group">
+										<label class="control control-radio">
+											<input class="colorSO" type="radio" name="colorch" />
+											<div class="control_indicator" onclick="changeCalamari(4)" style="background-color: #576947;"></div>
+										</label>
+									</div>
 								</div>
 							</form>
 						</div>
@@ -140,6 +158,10 @@
 					document.getElementsByTagName("body")[0].style.overflow="auto";
 					document.getElementsByClassName("login")[0].style.display="block";
 				}
+				if(getCookie("hat"))
+					hatchange(getCookie("hat")-1);
+				if(getCookie("dress"))
+					dresschange(getCookie("dress")-1);
 			}
 
 			function pickswitch(){
@@ -164,22 +186,141 @@
 			var CALAMARI = 0;
 
 			document.getElementById("login-form").onsubmit = function(e){
-    			e.preventDefault();
-    			let nameBox = document.getElementsByClassName("name-box")[0];
-    			let pswitch = document.getElementsByClassName("pickSwitch")[0];
-    			let chosen = 0;
-    			for(var i = 0;i<5;i++)
-    				if(document.getElementsByClassName("colorSO")[i].checked)
-    					chosen = i+1;
-    			socket.emit('usernameIn',{username: nameBox.value ,color: chosen, calamari: CALAMARI});
-    			setCookie("username",nameBox.value,30);
-    			setCookie("color",chosen,30);
-    			setCookie("type",CALAMARI,30);
-    			setCookie('clicked',true,30);
-    			document.getElementsByClassName("login")[0].style.display="none";
-    			document.getElementsByClassName("gameParts")[0].style.display="block";
-    		}
+				e.preventDefault();
+				let nameBox = document.getElementsByClassName("name-box")[0];
+				let pswitch = document.getElementsByClassName("pickSwitch")[0];
+				let chosen = 0;
+				for(var i = 0;i<5;i++)
+					if(document.getElementsByClassName("colorSO")[i].checked)
+						chosen = i+1;
+				socket.emit('usernameIn',{username: nameBox.value ,color: chosen, calamari: CALAMARI, hat: currHat, dress: currDress
+				});
+				setCookie("username",nameBox.value,30);
+				setCookie("color",chosen,30);
+				setCookie("type",CALAMARI,30);
+				setCookie('clicked',true,30);
+				setCookie("hat",currHat,30);
+				setCookie("dress",currDress,30);
+				document.getElementsByClassName("login")[0].style.display="none";
+				document.getElementsByClassName("gameParts")[0].style.display="block";
+			}
 
+
+			function displayClothes(n){
+				if(n!==listClothes){
+					document.getElementsByClassName("lister")[0].style.display="none";
+					document.getElementsByClassName("lister")[1].style.display="none";
+					document.getElementsByClassName("lister")[n].style.display="block";
+					let value = -3.2 + 2.9*n;
+					document.getElementsByClassName("lister")[n].style.top=value+"em";
+					document.getElementsByClassName("lister")[n].style.left=0;
+					listClothes = n;
+					if(n===0)
+						document.getElementsByClassName("listerheader")[0].style.backgroundColor="#b00e59";
+					else if(n===1)
+						document.getElementsByClassName("listerheader")[0].style.backgroundColor="#046263";
+				}
+				else{
+					document.getElementsByClassName("lister")[n].style.display="none";
+					listClothes = 88;	
+				}
+			}
+			var listClothes = 88;
+
+			// Make the DIV element draggable:
+			dragElement(document.getElementsByClassName("lister")[0]);
+			dragElement(document.getElementsByClassName("lister")[1]);
+
+			function dragElement(elmnt) {
+				let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+				if (document.getElementsByClassName(elmnt.class + "header")[listClothes]) {
+				// if present, the header is where you move the DIV from:
+				document.getElementsByClassName(elmnt.class + "header")[listClothes].onmousedown = dragMouseDown;
+				} else {
+				// otherwise, move the DIV from anywhere inside the DIV: 
+				elmnt.onmousedown = dragMouseDown;
+				}
+
+				function dragMouseDown(e) {
+				e = e || window.event;
+				e.preventDefault();
+				// get the mouse cursor position at startup:
+				pos3 = e.clientX;
+				pos4 = e.clientY;
+				document.onmouseup = closeDragElement;
+				// call a function whenever the cursor moves:
+				document.onmousemove = elementDrag;
+				}
+
+				function elementDrag(e) {
+				e = e || window.event;
+				e.preventDefault();
+				// calculate the new cursor position:
+				pos1 = pos3 - e.clientX;
+				pos2 = pos4 - e.clientY;
+				pos3 = e.clientX;
+				pos4 = e.clientY;
+				// set the element's new position:
+				elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+				elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+				}
+
+				function closeDragElement() {
+				// stop moving when mouse button is released:
+				document.onmouseup = null;
+				document.onmousemove = null;
+				}
+			}
+
+			function hatchange(n){
+				currHat += n;
+				let num = hatsources.length;
+				if(currHat===num)
+					currHat = 0;
+				if(currHat===-1)
+					currHat = num-1;
+				document.getElementsByClassName("hats")[0].src = hatsources[currHat-1];
+				document.getElementsByClassName("hats")[1].src = hatsources[currHat]; 
+				document.getElementsByClassName("hats")[2].src = hatsources[currHat+1];
+				if(currHat===0)
+					 document.getElementsByClassName("hats")[0].src = hatsources[num-1];
+				if(currHat===num-1)
+					 document.getElementsByClassName("hats")[2].src = hatsources[0];
+				if(hatsources[currHat]!=="/public/img/none.png"){
+					document.getElementsByClassName("styleMeHat")[0].style.display="block";
+					document.getElementsByClassName("styleMeHat")[0].src = hatsources[currHat];
+				}
+				else
+					document.getElementsByClassName("styleMeHat")[0].style.display="none";
+
+			}
+			var currHat = 1;
+			var hatsources = ["/public/img/cowboy.png","/public/img/none.png"];
+
+			function dresschange(n){
+				currDress += n;
+				let num = dresssources.length;
+				if(currDress===num)
+					currDress = 0;
+				if(currDress===-1)
+					currDress = num-1;
+				document.getElementsByClassName("dress")[0].src = dresssources[currDress-1];
+				document.getElementsByClassName("dress")[1].src = dresssources[currDress]; 
+				document.getElementsByClassName("dress")[2].src = dresssources[currDress+1];
+				if(currDress===0)
+					 document.getElementsByClassName("dress")[0].src = dresssources[num-1];
+				if(currDress===num-1)
+					 document.getElementsByClassName("dress")[2].src = dresssources[0];
+				if(dresssources[currDress]!=="/public/img/none.png"){
+					document.getElementsByClassName("styleMeDress")[0].style.display="block";
+					document.getElementsByClassName("styleMeDress")[0].src = dresssources[currDress];
+				}
+				else
+					document.getElementsByClassName("styleMeDress")[0].style.display="none";
+
+			}
+			var currDress = 1;
+			var dresssources = ["/public/img/cowboy_guns.png","/public/img/none.png"];
 
 		</script>
 		<script type="text/javascript" src="/public/js/game.js"></script>

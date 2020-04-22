@@ -265,3 +265,53 @@
 							border-radius: 2em;
 							border: 5px solid #AAAABB;
 						}
+
+
+
+
+
+					.lister{
+						width: 10vw;
+						min-width: 150px;
+						height: 5vh;
+						min-height: 48px;
+						position: absolute;
+						z-index: 88;
+						background-color: #FFFFFF;
+						border: 1px solid #CCCCCC;
+						border-radius: 10px;
+						text-align: center;
+						display: none;
+						height: 
+					}
+
+					.listerheader {
+					  padding: 5px;
+					  border-top-left-radius: 8px;
+					  border-top-right-radius: 8px;
+					  cursor: move;
+					  background-color: #046263;
+					}
+					.fa-chevron-left{
+						float: left;
+						padding-left: 10px;
+						margin-top: 0.7em;
+						cursor: pointer;
+					}
+					.fa-chevron-right{
+						float: right;
+						padding-right: 10px;
+						margin-top: 0.7em;
+						cursor: pointer;
+					}		
+					.hats{
+						width: 32px;
+						height: auto;
+						margin-top: 8px;
+					}
+					.dress{
+						width: 32px;
+						height: auto;
+						margin-top: 8px;
+					}
+
