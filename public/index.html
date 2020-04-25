@@ -17,9 +17,9 @@
 	</head>
 	<body onload="webLoaded()">
 		<div class="gameParts">
-			<canvas id="ctx" width="960" height="960"></canvas>
-			<canvas id="ctx-score" width="100" height="50" style="position: absolute;left: 0;bottom: 0;z-index: 3;"></canvas>
-			<canvas id="ctx-info" width="200" height="100" style="position: absolute;left: 0;top: 0;z-index: 3;"></canvas>
+			<canvas id="ctx" width="1920" height="1020"></canvas>
+			<canvas id="ctx-score" width="100" height="50" style="position: absolute;left: 0;top: 93%;z-index: 3;width: 6%;min-width: 65px;"></canvas>
+			<canvas id="ctx-info" width="200" height="100" style="position: absolute;left: 0;top: 0;z-index: 3;width: 12%;min-width: 130px;"></canvas>
 			<div class="upgrade-board">
 				<div class="upg_btn upg_mid upg_fir upg_sI upg_s" onclick="getUpgrade(1,1,1)">first</div>
 				<div class="upg_btn upg_left upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,0)">1</div>
@@ -132,7 +132,8 @@
 		<div class="cookieAcc">
 			<form id="cookie-form">
 				<p>Why we want your click on 'ACCEPT'?</p>
-				<p>Our Cookies is there only for your comfortabel, complete data, that we are storing can be found here</p>
+				„Tento web používá k poskytování služeb, personalizaci reklam a analýze návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.“
+				<p>Our Cookies is there only for your comfortabel. We are storing squid or octopus customization like color or hats.</p>
 				<input class="name-submit submit" type="submit" value="Accept" style="display: inline-block;margin-right: 15em;">
 			</form>
 		</div>
@@ -203,6 +204,8 @@
 				setCookie("dress",currDress,30);
 				document.getElementsByClassName("login")[0].style.display="none";
 				document.getElementsByClassName("gameParts")[0].style.display="block";
+				document.getElementsByTagName("body")[0].style.overflow="hidden";
+				ctxdisplay();
 			}
 
 
@@ -321,6 +324,40 @@
 			}
 			var currDress = 1;
 			var dresssources = ["/public/img/cowboy_guns.png","/public/img/none.png"];
+			
+			window.onresize = function (event) {
+				ctxdisplay();
+			}
+
+			function ctxdisplay() {
+				let w = window.innerWidth;
+				let h = window.innerHeight;
+				let ctx = document.getElementById("ctx");
+				let score = document.getElementById("ctx-score");
+				let table = document.getElementById("chatnlb-container");
+				let viewconst = 8.5;
+				if(w/16>h/viewconst){
+					ctx.style.height="100vh";
+					ctx.style.width="auto";
+					score.style.top="93%";
+					table.style.right=(w-1920*h/1020+20)+"px";
+				} else if(w/16<h/viewconst){
+					ctx.style.width="100vw";
+					ctx.style.height="auto";
+					score.style.top=(w/1600/h*viewconst*100*93)+"%";
+					table.style.right=2+"%";
+				}
+				if(w<900||h<420)
+					table.style.display="none";
+				else
+					table.style.display="block";
+				if(w<1020){
+					table.style.top="2%";
+					document.getElementById("chat-box").style.height="20%";
+				}
+			}
+
+
 
 		</script>
 		<script type="text/javascript" src="/public/js/game.js"></script>

@@ -1,5 +1,5 @@
-			const WIDTH = 960;
-			const HEIGHT = 960;
+			const WIDTH = 1920;
+			const HEIGHT = 1020;
 			const GAMESPEED = 40;
 
 			var Img = {};
@@ -223,7 +223,7 @@
 		        	}
 		        }
 		        var text = "";
-		        for(var k = 0; k < 9; k++){
+		        for(var k = 0; k < 10; k++){
 		        	if(lbScore[k]==undefined)
 		        		break;
 		        	if(lbPlayer[k].length<12){
@@ -252,7 +252,7 @@
 		   	
 		    setInterval(function(){
 		        ctx.clearRect(0,0,WIDTH,HEIGHT);
-		        ctx.drawImage(Img.background,0,0);
+		        ctx.drawImage(Img.background,0,0,Img.background.width,Img.background.height,0,0,WIDTH,HEIGHT);
 		        for(var i in Point.list)
 		          	Point.list[i].draw();
 		        for(var i in Player.list)
@@ -332,7 +332,7 @@
     					if(num===0)
     						vduration = 88;//infinity
     					if(num===0){
-    						vspeedBoost = 3;
+    						vspeedBoost = 4;
     						vaeduration = 3;
     					}
     				}

@@ -14,10 +14,11 @@ serv.listen(process.env.PORT || 8080, function (){
 console.log('2/  Server without problem');
 
 var SocketList = {};
-const WIDTH = 960;
-const HEIGHT = 960;
+const WIDTH = 1920;
+const HEIGHT = 1020;
 const BORDERvalue = 24;
 const GAMESPEED = 40;		//snimku za sekundu
+const normalSpeed = 7;
 var GAMETIMER = 0;
 
 var Entity = function(){	//zakladni objekt sveta
@@ -66,8 +67,8 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		self.effect = 0;//1=stealth
 		self.effectB = 0;//1+1=moveable
 		self.delay = 0;
-		self.effetTimer = 0;
-		self.effetTimer2 = 0;
+		self.effectTimer = 0;
+		self.effectTimer2 = 0;
 		//style
 		self.calamari = calamari;
 		self.hat = hat;
@@ -133,8 +134,8 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 				}
 				console.log(self.name+" slaped");
 				self.slaped=GAMESPEED*3;
-				self.effetTimer=0;
-				self.effetTimer2=0;
+				self.effectTimer=0;
+				self.effectTimer2=0;
 				self.effectKey=false;
 				self.delay=GAMESPEED*10;
 				if(self.friend!==undefined){
@@ -162,8 +163,8 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 				self.friend=0;
 				self.purpose=-1;
 			}
-			self.effetTimer=0;
-			self.effetTimer2=0;
+			self.effectTimer=0;
+			self.effectTimer2=0;
 		}	
 
 		if(self.purpose===1&&self.slaped<=GAMESPEED){//tocici se
@@ -212,7 +213,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		if(self.purpose===0)//kdyz vystreluju
 			self.speed=0;
 		else if(self.shot==false)//kdyz nic nemam udel a nebo budu strela
-			self.speed=5;
+			self.speed=normalSpeed;
 
 		if(self.slaped>0&&self.purpose===-1&&self.shot==false)//kdyz mam stun, jsem nic a nejsem strela
 		{
@@ -220,9 +221,9 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 			if(self.slaped>GAMESPEED)//stun
 				self.speed=0;
 			else
-				self.speed=6;//na sekundu rychlejsi
+				self.speed=normalSpeed+2;//na sekundu rychlejsi
 		}else if(self.purpose===-1&&self.shot==false){
-			self.speed = 5;
+			self.speed = normalSpeed;
 
 		}
 		if(self.delay>0){
@@ -230,28 +231,28 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 				self.effectKey=false;
 			self.delay--;
 		}
-		if(self.effectKey&&self.effetTimer===0&&self.delay===0&&self.slaped===0){
-			self.effetTimer=self.duration*GAMESPEED;
+		if(self.effectKey&&self.effectTimer===0&&self.effectTimer2===0&&self.delay===0&&self.slaped===0){
+			self.effectTimer=self.duration*GAMESPEED;
 			self.effectKey=false;
 		}
 
-		if(self.effetTimer>0){
-			self.effetTimer--;
-			if(self.effetTimer===0||self.effectKey){
+		if(self.effectTimer>0){
+			self.effectTimer--;
+			if(self.effectTimer===0||self.effectKey){
 				self.effectKey=false;
-				self.effetTimer=0;
+				self.effectTimer=0;
 				if(self.aeduration>0){
-					self.effetTimer2=self.aeduration*GAMESPEED;
+					self.effectTimer2=self.aeduration*GAMESPEED;
 				}
 				else
 					self.delay=GAMESPEED*10;
 			}
 		}
-		if(self.effetTimer2>0){
+		if(self.effectTimer2>0){
 			self.speed+=self.speedBoost;
-			if(self.effetTimer2===1)
+			if(self.effectTimer2===1)
 				self.delay=GAMESPEED*10;//upravit
-			self.effetTimer2--;
+			self.effectTimer2--;
 		}
 
 	}//end
@@ -279,28 +280,28 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 			self.shot=false;
 			self.friend=undefined;
 			matcher.friend=undefined;
-			self.speed=5;
+			self.speed=normalSpeed;
 			self.x=BORDERvalue;
 		}
 		if(self.x>(WIDTH-BORDERvalue)){
 			self.shot=false;
 			self.friend=undefined;
 			matcher.friend=undefined;
-			self.speed=5;
+			self.speed=normalSpeed;
 			self.x=WIDTH-BORDERvalue;
 		}
 		if(self.y<BORDERvalue){
 			self.shot=false;
 			self.friend=undefined;
 			matcher.friend=undefined;
-			self.speed=5;
+			self.speed=normalSpeed;
 			self.y=BORDERvalue;
 		}
 		if(self.y>(HEIGHT-BORDERvalue)){
 			self.shot=false;
 			self.friend=undefined;
 			matcher.friend=undefined;
-			self.speed=5;
+			self.speed=normalSpeed;
 			self.y=HEIGHT-BORDERvalue;
 		}
 	}
@@ -330,7 +331,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 	}
 	self.getUpdatePack = function(){
 		let Special = 0;
-		if(self.effetTimer>0)
+		if(self.effectTimer>0)
 			if(self.effect===1)
 				Special = 1;	
 		return{
@@ -434,7 +435,7 @@ var Point = function(){
     }
 
     self.updateDirection = function(){
-	    let speed = Math.floor(Math.random()*(7-3))+3;
+	    let speed = Math.floor(Math.random()*(normalSpeed+4-normalSpeed-2))+normalSpeed-2;
 	    if(self.timer%20===0){
 	    	self.angle = Math.random()*Math.PI+(3/2*Math.PI);
 			self.speedX = Math.cos(self.angle)*speed;
