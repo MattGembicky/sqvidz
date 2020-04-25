@@ -75,6 +75,7 @@
 		        	let imgHeight = 512;
 		        	let numberOfFrames = 48;
 		        	let colorOf = 0;
+		        	let colorsource = ["#c11f6a","#157396","#514d73","#957d4d","#579c47"];
 		        	if(self.color==="red")
 						colorOf = 0;
 		        	else if(self.color==="blue")
@@ -96,13 +97,13 @@
 		        	let pIcon = false;
 		        	if(self.delay>0)
 		        		pIcon = Img.timer;
-
 		        	if(self.special!==1){
 		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
 		        		if(self.hat!==1)
 		        			ctx.drawImage(Img.hat[self.hat],0,0,64,32,self.x-32,self.y-48,64,32);
 		        		if(self.dress!==1)
-		        			ctx.drawImage(Img.dress[self.hat],0,0,64,32,self.x-32,self.y-10,64,32);
+		        			ctx.drawImage(Img.dress[self.dress],0,0,64,32,self.x-32,self.y-10,64,32);
+		        		ctx.fillStyle = colorsource[colorOf];
 		        		ctx.fillText(name, self.x-(text.width/2), self.y-42);//name
 		        		if(pIcon)
 		        			ctx.drawImage(pIcon,0,0,32,32,self.x-(text.width/2)-20,self.y-54,16,16);
