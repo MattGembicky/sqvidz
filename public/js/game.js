@@ -37,12 +37,17 @@
 			Img.octopus[4].src = '/public/img/Green.png';
 			Img.octopus[5].src = '/public/img/Stealth.png';
 
-			for(var i = 0;i<1;i++)
-				Img.hat[i]=new Image();
-			Img.hat[0].src = '/public/img/cowboy.png';
-			for(var i = 0;i<1;i++)
-				Img.dress[i]=new Image();
-			Img.dress[0].src = '/public/img/cowboy_guns.png';
+			for(var i = 0;i<3;i++)
+				if(i!==1)//none
+					Img.hat[i]=new Image();
+			Img.hat[0].src = '/public/img/cowboy2.png';
+			Img.hat[2].src = '/public/img/cowboy3.png';
+			for(var i = 0;i<4;i++)
+				if(i!==1)//none
+					Img.dress[i]=new Image();
+			Img.dress[0].src = '/public/img/cowboy_guns2.png';
+			Img.dress[2].src = '/public/img/cowboy_scarf.png';
+			Img.dress[3].src = '/public/img/cowboy_scarf2.png';
 
 			var socket = io();
 
@@ -100,9 +105,9 @@
 		        	if(self.special!==1){
 		        		ctx.drawImage(pImage,Math.floor(self.currFrame)*imgWidth,0,imgWidth,imgHeight,self.x-pWidth/2,self.y-pHeight/2,pWidth,pHeight);
 		        		if(self.hat!==1)
-		        			ctx.drawImage(Img.hat[self.hat],0,0,64,32,self.x-32,self.y-48,64,32);
+		        			ctx.drawImage(Img.hat[self.hat],0,0,128,64,self.x-32,self.y-48,64,32);
 		        		if(self.dress!==1)
-		        			ctx.drawImage(Img.dress[self.dress],0,0,64,32,self.x-32,self.y-10,64,32);
+		        			ctx.drawImage(Img.dress[self.dress],0,0,128,64,self.x-32,self.y-10,64,32);
 		        		ctx.fillStyle = colorsource[colorOf];
 		        		ctx.fillText(name, self.x-(text.width/2), self.y-42);//name
 		        		if(pIcon)
