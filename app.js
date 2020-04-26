@@ -18,7 +18,7 @@ const WIDTH = 1920;
 const HEIGHT = 1020;
 const BORDERvalue = 24;
 const GAMESPEED = 40;		//snimku za sekundu
-const normalSpeed = 7;
+const normalSpeed = 6;
 var GAMETIMER = 0;
 
 var Entity = function(){	//zakladni objekt sveta
@@ -51,11 +51,13 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		self.invert = false;
 		self.keyRight = false;		//Rarrow or Dkey
 		self.keyLeft = false;
-		self.keyUp =false;;
+		self.keyUp =false;
 		self.keyDown =false;
 		self.effectKey =false;
 		//mech
+		self.rotations = 0;
 		self.shot = false;
+		self.shotTimer=0;
 		self.slaped = 0;
 		self.purpose = -1;
 		self.friend = 0;
@@ -185,6 +187,8 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 				if(self.angle>2*Math.PI){//nulovani jako pojistka preteceni
 					self.angle=0;
 				}
+				if(self.rotations<180)
+					self.rotations++;
 			}
 		}
 
@@ -196,11 +200,12 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 					matcher.purpose=-1;
 					self.friend=undefined;
 				}
-				if(self.ready==false&&matcher.ready==false&&self.purpose===1){//vystreleni
+				if(self.ready==false&&matcher.ready==false&&self.purpose===1&&self.rotations>60){//vystreleni
 					self.purpose=-1;
 					matcher.purpose=-1;
 					self.shot=true;
-					self.speed=30;
+					self.shotTimer+=self.rotations/6;
+					self.rotations=0;
 				}
 			}			
 		}
@@ -208,6 +213,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 
 		if(self.shot){//volani kdyz jsem strela
 			self.updateShot(self.angle);
+			self.shotTimer+=15/GAMESPEED;
 		}
 
 		if(self.purpose===0)//kdyz vystreluju
@@ -278,6 +284,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 			}
 		if(self.x<BORDERvalue){//hlidani borderu a narazu pri shotu
 			self.shot=false;
+			self.shotTimer=0;
 			self.friend=undefined;
 			matcher.friend=undefined;
 			self.speed=normalSpeed;
@@ -285,6 +292,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		}
 		if(self.x>(WIDTH-BORDERvalue)){
 			self.shot=false;
+			self.shotTimer=0;
 			self.friend=undefined;
 			matcher.friend=undefined;
 			self.speed=normalSpeed;
@@ -292,6 +300,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		}
 		if(self.y<BORDERvalue){
 			self.shot=false;
+			self.shotTimer=0;
 			self.friend=undefined;
 			matcher.friend=undefined;
 			self.speed=normalSpeed;
@@ -299,6 +308,7 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		}
 		if(self.y>(HEIGHT-BORDERvalue)){
 			self.shot=false;
+			self.shotTimer=0;
 			self.friend=undefined;
 			matcher.friend=undefined;
 			self.speed=normalSpeed;
@@ -311,8 +321,8 @@ var Player = function(id,username,color,calamari,hat,dress){		//player data
 		else
 			angle-=Math.PI/2;
 		if(self.shot){
-			self.x += Math.cos(angle)*20;
-			self.y += Math.sin(angle)*20;
+			self.x += Math.cos(angle)*(40+self.shotTimer);
+			self.y += Math.sin(angle)*(40+self.shotTimer);
 		}
 	}
 	self.getInitPack = function(){
@@ -368,8 +378,10 @@ Player.onConnect = function(socket,username,color,calamari,hat,dress){
   			player.keyDown = data.state;
   		if(data.inputId==='space')
   			player.ready = data.state;
-  		if(data.inputId==='shift')
+  		if(data.inputId==='shift'){
   			player.invert = data.state;
+  			player.rotations = 0;
+  		}
   		if(data.inputId==='effect')
   			player.effectKey = data.state;
 	});
