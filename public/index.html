@@ -132,15 +132,13 @@
 		<div class="cookieAcc">
 			<form id="cookie-form">
 				<p>Why we want your click on 'ACCEPT'?</p>
-				„Tento web používá k poskytování služeb, personalizaci reklam a analýze návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.“
 				<p>Our Cookies is there only for your comfortabel. We are storing squid or octopus customization like color or hats.</p>
 				<input class="name-submit submit" type="submit" value="Accept" style="display: inline-block;margin-right: 15em;">
 			</form>
 		</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-		<script>
-
-			function webLoaded() {	
+		<script> 
+			window.onload =  function() {	
 				var fullDate = new Date();
 				var hoursNow = fullDate.getHours();
 				var tentacle = document.getElementsByClassName("sqvidTacle")[0];
@@ -151,7 +149,8 @@
 				document.getElementsByClassName("name-box")[0].value=getCookie("username");
 				if(getCookie("type")===1)
 					pickswitch();
-				var i = parseInt(getCookie("color"))-1;
+				let i = 0;
+				i = parseInt(getCookie("color"))-1;
 				document.getElementsByClassName("colorSO")[i].checked=true;
 				changeCalamari(i);
 				if(getCookie("clicked")){
@@ -164,7 +163,6 @@
 				if(getCookie("dress"))
 					dresschange(getCookie("dress")-1);
 			}
-
 			function pickswitch(){
 				var pswitch = document.getElementsByClassName("pickSwitch")[0];
 				if(pswitch.value==="SQUID"){

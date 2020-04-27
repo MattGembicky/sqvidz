@@ -2,6 +2,7 @@ document.getElementById("cookie-form").onsubmit = function(e){
  	e.preventDefault();
 	document.getElementsByClassName("cookieAcc")[0].style.display="none";
 	document.getElementsByTagName("body")[0].style.overflow="auto";
+	document.getElementsByClassName("login")[0].style.display="block";
 	setCookie('clicked',true,365);
 }
 
