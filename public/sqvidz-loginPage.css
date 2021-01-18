@@ -5,7 +5,6 @@
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%);
-	border: 3px solid black;
 	z-index: 0;
 	display: none;
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -313,5 +312,30 @@
 						width: 32px;
 						height: auto;
 						margin-top: 8px;
+					}
+					.styleMeHat{
+						position: absolute;
+						z-index: 10;
+						width: 128px;
+						top: 3.5em;
+						left: 50%;
+						transform: translate(-50%,0);
+					}
+					.styleMe{
+						position: absolute;
+						z-index: 9;
+						width: 128px;
+						top: 5.5em;
+						left: 50%;
+						transform: translate(-50%,0);
+						height: 128px;
+					}
+					.styleMeDress{
+						position: absolute;
+						z-index: 10;
+						width: 128px;
+						top: 8.2em;
+						left: 50%;
+						transform: translate(-50%,0);
 					}
 

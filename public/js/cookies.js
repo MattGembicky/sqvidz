@@ -6,22 +6,21 @@ document.getElementById("cookie-form").onsubmit = function(e){
 	setCookie('clicked',true,365);
 }
 
-function setCookie(cname, cvalue, exdays) {
-	var d = new Date();
-	d.setTime(d.getTime() + (exdays*24*60*60*1000));
-	var expires = "expires="+ d.toUTCString();
-	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setCookie(CookieName, CookieValue, expirationDays) {
+	let date = new Date();
+	date.setTime(date.getTime() + (expirationDays*24*60*60*1000));
+	let expires = "expires="+ date.toUTCString();
+	document.cookie = CookieName + "=" + CookieValue + ";" + expires + ";path=/";
 }
 
-function getCookie(cname) {
-	var name = cname + "=";
-	var decodedCookie = decodeURIComponent(document.cookie);
-	var ca = decodedCookie.split(';');
-	for(var i = 0; i <ca.length; i++){
-		var c = ca[i];
-		while (c.charAt(0) == ' ')
+function getCookie(CookieName) {
+	let name = CookieName+"=";
+	let cookies = decodeURIComponent(document.cookie).split(';');//speciální znaky a split
+	for(let i = 0; i <cookies.length; i++){
+		let c = cookies[i];
+		while (c.charAt(0) == ' ')//mezery pryc
 			c = c.substring(1);
-		if (c.indexOf(name) == 0)
+		if (c.indexOf(name) == 0)//return
 			return c.substring(name.length, c.length);
 	}
 	return "";
