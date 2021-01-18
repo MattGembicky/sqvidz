@@ -47,12 +47,12 @@ Img.octopus[5].src = '/public/img/Stealth.png';
 for(var i = 0;i<3;i++)
 	if(i!==1)//none
 		Img.hat[i]=new Image();
-Img.hat[0].src = '/public/img/cowboy2.png';
-Img.hat[2].src = '/public/img/cowboy3.png';
+Img.hat[0].src = '/public/img/cowboy_hat.png';
+Img.hat[2].src = '/public/img/cowboy_hat2.png';
 for(var i = 0;i<4;i++)
 	if(i!==1)//none
 		Img.dress[i]=new Image();
-Img.dress[0].src = '/public/img/cowboy_guns2.png';
+Img.dress[0].src = '/public/img/cowboy_guns.png';
 Img.dress[2].src = '/public/img/cowboy_scarf.png';
 Img.dress[3].src = '/public/img/cowboy_scarf2.png';
 
