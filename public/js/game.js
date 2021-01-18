@@ -8,11 +8,9 @@ const PLAYERIMGHEIGHT = 512;
 const NUMBEROFFRAMES = 48;
 
 var Img = {};
-Img.player = new Image();
 Img.logoR = new Image();
 Img.logoB = new Image();
 Img.background = new Image();
-Img.point1 = new Image();
 Img.dir1 = new Image();
 Img.dir2 = new Image();
 Img.octopus = [];
@@ -25,9 +23,7 @@ Img.ink = new Image();
 
 Img.logoR.src = '/public/img/red_tentacle.png';
 Img.logoB.src = '/public/img/blue_tentacle.png';
-Img.player.src = '/public/img/octolia.png';
 Img.background.src = '/public/img/background.png';
-Img.point1.src = '/public/img/point.png';
 Img.dir1.src = '/public/img/direction1.png';
 Img.dir2.src = '/public/img/direction2.png';
 Img.shrimp.src = '/public/img/blackTigerShrimp.png';
