@@ -93,16 +93,16 @@
 										<div class="lister">
 											<div class="listerheader"></div>
 											<i class="fas fa-chevron-left" onclick="hatchange(-1)"></i>
-												<img class="hats" src="/public/img/cowboy2.png">
+												<img class="hats" src="/public/img/cowboy_hat.png">
 												<img class="hats" src="/public/img/none.png" style="border-bottom: 2px solid #000000; padding-bottom: 2px;">
-												<img class="hats" src="/public/img/cowboy3.png">
+												<img class="hats" src="/public/img/cowboy_hat2.png">
 											<i class="fas fa-chevron-right" onclick="hatchange(1)"></i>
 										</div>
 									<i class="pickClo fab fa-black-tie" onclick="displayClothes(1)"></i><br>
 										<div class="lister">
 											<div class="listerheader"></div>
 											<i class="fas fa-chevron-left" onclick="dresschange(-1)"></i>
-												<img class="dress" src="/public/img/cowboy_guns2.png">
+												<img class="dress" src="/public/img/cowboy_guns.png">
 												<img class="dress" src="/public/img/none.png" style="border-bottom: 2px solid #000000; padding-bottom: 2px;">
 												<img class="dress" src="/public/img/cowboy_scarf.png">
 											<i class="fas fa-chevron-right" onclick="dresschange(1)"></i>
@@ -344,7 +344,7 @@
 					document.getElementsByClassName("styleMeHat")[0].style.display="none";
 			}
 			var currHat = 1;
-			var hatsources = ["/public/img/cowboy2.png","/public/img/none.png","/public/img/cowboy3.png"];
+			var hatsources = ["/public/img/cowboy_hat.png","/public/img/none.png","/public/img/cowboy_hat2.png"];
 
 			function dresschange(n){
 				currDress += n;
@@ -368,7 +368,7 @@
 					document.getElementsByClassName("styleMeDress")[0].style.display="none";
 			}
 			var currDress = 1;
-			var dresssources = ["/public/img/cowboy_guns2.png","/public/img/none.png","/public/img/cowboy_scarf.png","/public/img/cowboy_scarf2.png"];
+			var dresssources = ["/public/img/cowboy_guns.png","/public/img/none.png","/public/img/cowboy_scarf.png","/public/img/cowboy_scarf2.png"];
 			
 			window.onresize = function(event){
 				ctxDisplayEverythingAtRightPosition();
