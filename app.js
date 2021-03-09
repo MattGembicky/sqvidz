@@ -16,6 +16,7 @@ var SocketList = {};
 		appServer = require('http').Server(app);
 		mysql = require('mysql');
 		bcrypt = require('bcrypt');
+		dotenv = require('dotenv').config()
 		console.log('2'.yellow+'/5 dependecies were successfuly added'.green);controler++;
 	}catch(err){
 		if (err) throw err;
@@ -34,10 +35,10 @@ var SocketList = {};
 		console.log('Problem with connection'.bgBrightRed);
 	}
 	var con = mysql.createConnection({		//https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
-		host: "localhost",
-		user: "root",
-		password: "password",
-		database: "sqvidz"
+		host: process.env.DB_HOST,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASS,
+		database: process.env.DB_DTBS
 	});
 	function databaseConnFunction(){
 		con.connect(function(err){
