@@ -80,17 +80,31 @@ h2{
 	color: #FFFFFF;
 }
 	.msg-name-red{
-color: #e33f8c;
+		color: #e33f8c;
 	}
 	.msg-name-blue{
-color: #379596;
+		color: #379596;
 	}
 	.msg-name-violet{
-color: #847fa6;
+		color: #847fa6;
 	}
 	.msg-name-yellow{
-color: #a69f7f;
+		color: #a69f7f;
 	}
 	.msg-name-green{
-color: #8a9c7a;
+		color: #8a9c7a;
 	}
+
+.blinding{
+	position: absolute;
+	background-color: #000;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	display: none;
+}
+
+
+
+
+

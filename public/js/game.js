@@ -31,7 +31,7 @@ Img.shrimpG.src = '/public/img/blackTigerShrimpGolden.png';
 Img.timer.src = '/public/img/timer.png';
 Img.ink.src = '/public/img/ink_speed.png';
 
-for(var i = 0;i<6;i++)
+for(let i = 0;i<6;i++)
 	Img.octopus[i]=new Image();
 Img.octopus[0].src = '/public/img/Red.png';
 Img.octopus[1].src = '/public/img/Blue.png';
@@ -40,12 +40,12 @@ Img.octopus[3].src = '/public/img/Yellow.png';
 Img.octopus[4].src = '/public/img/Green.png';
 Img.octopus[5].src = '/public/img/Stealth.png';
 
-for(var i = 0;i<3;i++)
+for(let i = 0;i<3;i++)
 	if(i!==1)//none
 		Img.hat[i]=new Image();
 Img.hat[0].src = '/public/img/cowboy_hat.png';
 Img.hat[2].src = '/public/img/cowboy_hat2.png';
-for(var i = 0;i<4;i++)
+for(let i = 0;i<4;i++)
 	if(i!==1)//none
 		Img.dress[i]=new Image();
 Img.dress[0].src = '/public/img/cowboy_guns.png';
@@ -53,6 +53,10 @@ Img.dress[2].src = '/public/img/cowboy_scarf.png';
 Img.dress[3].src = '/public/img/cowboy_scarf2.png';
 
 var socket = io();
+
+
+
+//var socket = io();
 
 //init
 var ctx = document.getElementById("ctx").getContext("2d");
@@ -77,7 +81,7 @@ var Player = function(initPack){
 	self.dress = initPack.dress;
 	self.debuffEffect2 = initPack.debuffEffect2;
 
-	self.draw = function(){
+	self.draw = function(){//dle pozice ze serveru vykresluje vsechny hrace (chobotnici a na potom obleceni)
 		if(self.id===selfId)
 			if(self.debuffEffect2===2)
 				document.getElementsByClassName("blinding")[0].style.display="block";
@@ -104,11 +108,11 @@ var Player = function(initPack){
 		let text = ctx.measureText(name);
 		let pImage = Img.octopus[colorOf];
 		if(self.calamari===1)
-			pImage = Img.octopus[5];//squid
+			pImage = Img.octopus[5];
 		let pIcon = false;
 		if(self.delay>0)
 			pIcon = Img.timer;
-		if(self.special!==1){
+		if(self.special!==1){//je nevyditelny
 			ctx.drawImage(pImage,Math.floor(self.currFrame)*PLAYERIMGWIDTH,0,PLAYERIMGWIDTH,PLAYERIMGHEIGHT,self.x-PLAYERWIDTH/2,self.y-PLAYERHEIGHT/2,PLAYERWIDTH,PLAYERHEIGHT);
 			if(self.hat!==1)
 				ctx.drawImage(Img.hat[self.hat],0,0,128,64,self.x-32,self.y-48,64,32);
@@ -141,13 +145,12 @@ var Point = function(initPack){
 	self.currFrame = 0;
 	self.color = initPack.color;
 
-
 	self.draw = function(){
 		let sImage = Img.shrimp;
 		if(self.color===10)
 			sImage = Img.shrimpG;
 
-		ctx.save();
+		ctx.save();//otaceni ve smeru pohybu
 		ctx.translate(self.x,self.y);
 		ctx.rotate(self.angle);
 		ctx.translate(-self.x,-self.y);
@@ -158,7 +161,6 @@ var Point = function(initPack){
 		if(self.currFrame>(1.9))
 			self.currFrame=0;
 	}
-	//Math.floor(self.currFrame)*40//
 
 	Point.list[self.id] = self;
 	return self;
@@ -186,7 +188,6 @@ var selfId = null;
 socket.on('init',function(data){  
 	if(data.selfId)
 		selfId = data.selfId;
-	//{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
 	for(var i = 0 ; i < data.player.length; i++){
 		new Player(data.player[i]);
 	}
@@ -196,7 +197,6 @@ socket.on('init',function(data){
 });
 		   
 socket.on('update',function(data){
-	//{ player : [{id:123,x:0,y:0},{id:1,x:0,y:0}], bullet: []}
 	for(var i = 0; i < data.player.length; i++){
 		var pack = data.player[i];
 		var p = Player.list[pack.id];
@@ -244,7 +244,8 @@ socket.on('update',function(data){
 
 var leaderupdate = function(data){
 	var lbBox = document.getElementById("lb-box");
-	var lbScore = [];var lbPlayer = [];
+	var lbScore = [];
+	var lbPlayer = [];
 
 	for(var i = 0; i < data.player.length; i++){
 		var pack = data.player[i];
@@ -281,7 +282,6 @@ var leaderupdate = function(data){
 }
 	   
 socket.on('remove',function(data){
-	//{player:[12323],bullet:[12323,123123]}
 	for(var i = 0 ; i < data.player.length; i++){
 		delete Player.list[data.player[i]];
 	}
@@ -307,10 +307,9 @@ setInterval(function(){
 	timerInvertShift--;
 	if(wantPerk>actualPerk)
 		displayUpgrade();
-},1000/GAMESPEED);		//game speed
+},1000/GAMESPEED);
 
 var drawScore = function(){
-	//if(Player.list[selfId].score===0||lastscore==Player.list[selfId].score)
 	if(typeof Player.list[selfId].score == 'number'&&lastscore==Player.list[selfId].score)
 		return;
 	lastscore=Player.list[selfId].score;
@@ -499,16 +498,23 @@ var upgradeUsed1 = 0;
 var upgradeUsed2 = 0;
 var wantPerk = 1;
 
-//game movement Player.list[selfId]
 document.onkeydown = function(event){	//if key pressed
-	if(event.keyCode === 68 || event.keyCode === 39)	//D key nebo Rigth arrow
+	if(event.keyCode === 68 || event.keyCode === 39){	//D key nebo Rigth arrow
 		socket.emit('keyPress',{inputId:'right',state: true});
-	if(event.keyCode === 65 || event.keyCode === 37)	//Akey or Larrow
+		console.log("right");
+	}
+	if(event.keyCode === 65 || event.keyCode === 37){	//Akey or Larrow
 		socket.emit('keyPress',{inputId:'left',state: true});
-	if(event.keyCode === 87 || event.keyCode === 38)	//Wkey or Uarrow
+		console.log("left");
+	}
+	if(event.keyCode === 87 || event.keyCode === 38){	//Wkey or Uarrow
 		socket.emit('keyPress',{inputId:'up',state: true});
-	if(event.keyCode === 83 || event.keyCode === 40)	//Skey or Darrow
+		console.log("up");
+	}
+	if(event.keyCode === 83 || event.keyCode === 40){	//Skey or Darrow
 		socket.emit('keyPress',{inputId:'down',state: true});
+		console.log("down");
+	}
 	if(event.keyCode === 32)	//Spacebar
 		socket.emit('keyPress',{inputId:'space',state: true});
 	if(event.keyCode === 16){	//Shift

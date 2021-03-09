@@ -54,13 +54,13 @@
 			list-style-type: none;
 			padding: 0;
 			overflow: hidden;
+			display: table;
+			margin: auto;
 		}
 
 		li{
 			float: left;
 			position: relative;
-			left: 50%;
-			transform: translate(-50%,0);
 		}
 		.login-box{
 			width: 300px;
@@ -68,8 +68,6 @@
 			background-color: #FFFFFF;
 			border-radius: 16px;
 			position: relative;
-			left: 50%;
-			transform: translate(-50%,0);
 			transition: 0.3s;
 			display: inline-block;
 			margin: 1em;
@@ -105,6 +103,7 @@
 					border-color: #666677;
 					letter-spacing: 0.1em;
 					width: 12vw;
+					min-width: 120px;
 				}
 				.name-submit{
 					width: 100px;
@@ -139,20 +138,46 @@
 					margin: 0 auto 0;
 					text-align: center;
 					font-size: 1em;
-					top: 140px;
 					position: relative;
 					z-index: 1;
 				}
-			.fa-question-circle{
-				display: inline-block;
+				.logreg-text{
+					display: block;
+					width: 100%;
+					text-align: center;
+				}
+				.logreg-click{
+					color: rgb(0,136,251);
+					cursor: pointer;
+				}
+				.LoginMessageBox{
+					display: block;
+					width: 90%;
+					text-align: center;
+					margin-left: 5%;
+					color: #FF0000;
+				}
+			.balance-middle{
+				display: none;
+				margin-top: 0.5em;
+				margin-left: 0.5em;
+				z-index: 1;
+				font-size: 1.5em;
+				color: #ffca1c;
+				text-shadow: 2px 2px #9e8639;
+			}
+			.fa-question-circle, .fa-sign-out-alt{
+				display: inline-table;
 				float: right;
 				margin-top: 0.5em;
 				margin-right: 0.5em;
 				z-index: 1;
 				font-size: 1.5em;
 				padding: 1px;
+				padding-left: 2px;
 				transition: 0.4s;
 				color: #888899;
+				cursor: pointer;
 			}
 			.fa-question-circle:hover{
 				border: 0.2em solid #888899;
@@ -183,6 +208,7 @@
 					text-shadow: 2px 2px 5px #000000;
 					box-shadow: 2px 2px 5px #000000;
 					border: none;
+					cursor: pointer;
 				}
 				.pickClothing{
 					position: relative;
@@ -337,5 +363,11 @@
 						top: 8.2em;
 						left: 50%;
 						transform: translate(-50%,0);
+					}
+					.SaveToMiddle{
+						display: block;
+						width: 95%;
+						position: absolute;
+						bottom: 2%;
 					}
 

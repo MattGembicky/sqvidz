@@ -21,7 +21,7 @@
 			<canvas id="ctx-score" width="100" height="50"></canvas>
 			<canvas id="ctx-info" width="200" height="100"></canvas>
 	
-			<div class="upgrade-board"><!--vzresit jinak idealne-->
+			<div class="upgrade-board">
 				<div class="upg_btn upg_mid upg_fir upg_sI upg_s" onclick="getUpgrade(1,1,1)" up-title="Stealth">first</div>
 				<div class="upg_btn upg_left upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,0)" up-title="duration +1s">1</div>
 				<div class="upg_btn upg_mid upg_ae upg_sec upg_sII upg_s" onclick="getUpgrade(1,2,1)" up-title="AE duration +1s, speed boost +2">2</div>
@@ -53,7 +53,9 @@
 				<div class="upg_btn upg_right upg_fif upg_sV upg_s" onclick="getUpgrade(2,5,2)" up-title="ink lasts +2s">3</div>
 				<div class="upg_btn upg_mid upg_six upg_sVI upg_s" onclick="getUpgrade(2,6,1)" up-title="">2</div>
 			</div>
-			<div class="blinding" style="position: absolute;background-color: #000;width: 100%;height: 100%;z-index: 9999; display: none;"></div>
+
+			<div class="blinding"></div>
+
 			<div id="chatnlb-container">
 				<h2 style="border-top: 0;background-color: #b00e59;">Leaderboard</h2>
 					<div id="lb-box"></div>
@@ -65,30 +67,51 @@
 					</form>
 			</div>
 		</div>
+
 		<div class="login">
-			<h1 class="version">DEVELOPMENT VERSION</h1>
 			<div class="logo">
 				<h1 class="name-sqvidz" style="left: 50%;transform: translate(-100%,0);">SQV</h1>
 					<img class="sqvidTacle" src="/public/img/red_tentacle.png" alt="sqvidTacle">
 				<h1 class="name-sqvidz">DZ.io</h1>
 			</div>
+
 			<div class="login-box-conatainer">
-				<ul><!--tabulky loginu a styliyovani-->
-					<li>
+				<ul><!--tabulky loginu a stylizovani-->
+					<li><!--registrace a login-->
 						<div class="login-box">
+							<form id="loginRegister-form">
+								<input class="name-box register-username" type="text" maxlength="20" placeholder="username" style="margin-top: 10%;">
+								<input class="name-box register-password" type="password" maxlength="30" placeholder="password">
+								<input class="name-box register-password" type="password" maxlength="30" placeholder="password again">
+								<input class="name-submit submit register-submit" type="submit" value="Register">
+								<span class="logreg-text">Alreday have account? <span class="logreg-click" onclick="loginOrRegisterForm(true);">Login</span></span>
+							</form>
+							<form id="loginLogin-form" style="display: none;">
+								<input class="name-box login-username" type="text" maxlength="20" placeholder="username" style="margin-top: 10%;">
+								<input class="name-box login-password" type="password" maxlength="30" placeholder="password">
+								<input class="name-submit submit login-submit" type="submit" value="Login">
+								<span class="logreg-text">Don't have account? <span class="logreg-click" onclick="loginOrRegisterForm(false);">Register</span></span>
+							</form>
+							<span class="LoginMessageBox"></span>
+						</div>
+					</li>
+					<li><!--tlacitko play a nickname-->
+						<div class="login-box">
+							<span class="balance-middle"></span>
 							<i class="fas fa-question-circle"></i>
-							<form id="login-form">
-								<input class="name-box" type="text" maxlength="20" placeholder="username">
+							<i class="fas fa-sign-out-alt" onclick="logout();" style="display: none;"></i>
+							<form id="username-play-form">
+								<input class="name-box username" type="text" maxlength="20" placeholder="username" style="margin-top: 40%;">
 								<input class="name-submit submit" type="submit" value="Play">
 							</form>
 							<p class="name-border">Make sure that you can see all tentacles</p>
 						</div>
 					</li>
-					<li>
+					<li><!--vyber vzhledu-->
 						<div class="login-box">
 							<form id="pick-form">
-								<input type="button" class="pickSwitch" name="so" value="OCTOPUS" onclick="pickswitch()">
-								<div class="pickClothing">
+								<input type="button" class="pickSwitch" name="so" value="OCTOPUS" onclick="pickswitch()"><!--UPRAVIT-->
+								<div class="pickClothing"><!--vyber obleceni-->
 									<i class="pickClo fas fa-hat-cowboy" onclick="displayClothes(0)"></i><br>
 										<div class="lister">
 											<div class="listerheader"></div>
@@ -107,12 +130,13 @@
 												<img class="dress" src="/public/img/cowboy_scarf.png">
 											<i class="fas fa-chevron-right" onclick="dresschange(1)"></i>
 										</div>
-									<i class="pickClo fas fa-ring"></i>
 								</div>
-								<img class="styleMeHat" src="">
+
+								<img class="styleMeHat" src=""><!--zobrazeni vyberu vzhledu-->
 								<img class="styleMe" src="/public/img/Red.gif" alt="Styling">
 								<img class="styleMeDress" src="">
-								<div class="pickColor">
+
+								<div class="pickColor"><!--Vyber vyhledu pomoci vlasnich radio buttonu-->
 									<div class="control-group">
 										<label class="control control-radio"> 
 											<input class="colorSO" type="radio" name="colorch" />
@@ -144,9 +168,14 @@
 										</label>
 									</div>
 								</div>
+
+								<div class="SaveToMiddle">
+									<input class="name-submit submit pickSubmit" type="submit" value="Save">
+								</div>
 							</form>
 						</div>
 					</li>
+					</div>
 				</ul>
 			</div>
 		</div>
@@ -158,9 +187,14 @@
 			</form>
 		</div>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-		<script> 
-			window.onload = function() {
-				let setTentacleByDayTime = function(){
+		<script>
+			var myDatabaseId = undefined;
+			window.onload = function(){
+				loginPageSET();
+			};
+
+			function loginPageSET(){
+				let setTentacleImageByDayTime = function(){
 					let fullDate = new Date();
 					let hoursNow = fullDate.getHours();
 					let tentacle = document.getElementsByClassName("sqvidTacle")[0];
@@ -168,7 +202,7 @@
 						tentacle.src ="/public/img/blue_tentacle.png";						
 				}
 				let setStyleAndNameFromYourCookies = function(){
-					document.getElementsByClassName("name-box")[0].value=getCookie("username");
+					document.getElementsByClassName("username")[0].value=getCookie("username");
 					if(getCookie("type")===1)
 						pickswitch();
 					let i = 0;
@@ -180,17 +214,40 @@
 					if(getCookie("dress"))
 						dresschange(getCookie("dress")-1);
 				}
-
-				setTentacleByDayTime();
-				if(getCookie("clicked")){
-					setStyleAndNameFromYourCookies();
+				let displayLoginPage = function(){
 					document.getElementsByClassName("cookieAcc")[0].style.display="none";
 					document.getElementsByTagName("body")[0].style.overflow="auto";
 					document.getElementsByClassName("login")[0].style.display="block";
-				}	
+				}
+				let notLogedFromCookie = function(){
+					displayLoginPage();
+					if(getCookie("username")){
+						setStyleAndNameFromYourCookies();
+					}
+				}
+
+				setTentacleImageByDayTime();
+				if(getCookie("clicked")){
+					if(getCookie("cookieForLogin")){
+						let getCookies = getCookie("cookieForLogin");
+						let Timer = setTimeout(function(){//jestlize se po 7 sekundach nepodari prihlasit z cookie
+							if(cookieLoginDone){
+								cookieLoginDone = false;
+								document.getElementsByClassName("login")[0].style.display="block";
+								setCookie("cookieForLogin","",0);
+								notLogedFromCookie();
+							}
+						}, 7000);
+						socket.emit('LoginFromCookie',{loginCookie: getCookies});
+				        displayLoginPage();
+				        document.getElementsByClassName("login")[0].style.display="none";
+					}else{
+						notLogedFromCookie();
+					}
+				}
 			}
 
-			function pickswitch(){
+			function pickswitch(){//UPRAVIT
 				let pswitch = document.getElementsByClassName("pickSwitch")[0];
 				if(pswitch.value==="SQUID"){
 					pswitch.value="OCTOPUS";
@@ -202,6 +259,7 @@
 					CALAMARI=1;
 				}
 			}
+
 			function changeCalamari(n){
 				let sources = ["Red.gif","Blue.gif","Violet.gif","Yellow.gif","Green.gif"];
 				if(CALAMARI===0)
@@ -237,18 +295,19 @@
 				}
 			}
 
-			document.getElementById("login-form").onsubmit = function(e){
+			document.getElementById("username-play-form").onsubmit = function(e){
 				e.preventDefault();
-				let nameBox = document.getElementsByClassName("name-box")[0];
-				if(nameBox.value.length<3)
-					return 1;
+				let nameBox = document.getElementsByClassName("username")[0];
 				let emitInformationsToServerForSettingUpPlayerPLUSsetAllStylesAndNameToCookies = function(){
 					let pswitch = document.getElementsByClassName("pickSwitch")[0];
 					let chosen = 0;
 					for(let i = 0;i<5;i++)
 						if(document.getElementsByClassName("colorSO")[i].checked)
 							chosen = i+1;
-					socket.emit('usernameIn',{username: nameBox.value ,color: chosen, calamari: CALAMARI, hat: currHat, dress: currDress});
+					let dbid = myDatabaseId;
+					if(dbid===undefined)
+						dbid="NaL";
+					socket.emit('usernameIn',{DBid: dbid, username: nameBox.value ,color: chosen, calamari: CALAMARI, hat: currHat, dress: currDress});
 					setCookie("username",nameBox.value,30);
 					setCookie("color",chosen,30);
 					setCookie("type",CALAMARI,30);
@@ -262,12 +321,91 @@
 					document.getElementsByTagName("body")[0].style.overflow="hidden";
 					ctxDisplayEverythingAtRightPosition();
 				}
-				
-				emitInformationsToServerForSettingUpPlayerPLUSsetAllStylesAndNameToCookies();
-				hideLoginPageAndStart();
+
+				if(nameBox.value.length>2){
+					emitInformationsToServerForSettingUpPlayerPLUSsetAllStylesAndNameToCookies();
+					hideLoginPageAndStart();
+				}else{
+					document.getElementsByClassName("name-border")[0].innerHTML+="<span style=\"color: red;\"><br>Username is too short, try 3 or more character one</span>";
+				}				
 			}
 
-			function displayClothes(n){//picekry na customizace
+			document.getElementById("pick-form").onsubmit = function(e){
+				e.preventDefault();
+				let nameBox = document.getElementsByClassName("username")[0];
+				let emitInformationsToServerForSettingUpPlayerPLUSsetAllStylesAndNameToCookies = function(){
+					let pswitch = document.getElementsByClassName("pickSwitch")[0];
+					let chosen = 0;
+					for(let i = 0;i<5;i++)
+						if(document.getElementsByClassName("colorSO")[i].checked)
+							chosen = i+1;
+					let myHat = currHat;let myDress = currDress;
+					if(currHat<10){
+						myHat= "00"+currHat;
+					}else if(currHat<100){
+						myHat = "0"+currHat;
+					}
+					if(currDress<10){
+						myDress= "00"+currDress;
+					}else if(currDress<100){
+						myDress = "0"+currDress;
+					}
+					let superString = CALAMARI+""+chosen+""+myHat+""+myDress;
+					if(myDatabaseId!==undefined)
+						socket.emit('saveCustomization',{username: nameBox.value, custom: superString, id: myDatabaseId});
+					setCookie("username",nameBox.value,30);
+					setCookie("color",chosen,30);
+					setCookie("type",CALAMARI,30);
+					setCookie("hat",currHat,30);
+					setCookie("dress",currDress,30);
+				}		
+				if(nameBox.value.length>2){
+					emitInformationsToServerForSettingUpPlayerPLUSsetAllStylesAndNameToCookies();
+				}else
+					document.getElementsByClassName("name-border")[0].innerHTML+="<span style=\"color: red;\"><br>Username is too short, try 3 or more character one</span>";
+			}
+
+
+			document.getElementById("loginRegister-form").onsubmit = function(e){
+				e.preventDefault();
+				let getUsername = document.getElementsByClassName("register-username")[0];
+				if(getUsername.value.length<3){
+					document.getElementsByClassName("LoginMessageBox")[0].innerHTML = "Username is too short, try 3 or more character one";
+					return 1;
+				}
+				let getPasswordF = document.getElementsByClassName("register-password")[0];
+				let getPasswordS = document.getElementsByClassName("register-password")[1];
+				if(getPasswordF.value.length<5){
+					document.getElementsByClassName("LoginMessageBox")[0].innerHTML = "Password is too short";
+					return 1;
+				}else if(getPasswordF.value!==getPasswordS.value){
+					document.getElementsByClassName("LoginMessageBox")[0].innerHTML = "Passwords do not match";
+					return 1;
+				} 
+
+				//pokud vse projde
+				socket.emit('RegisterNew',{username: getUsername.value, password: getPasswordF.value});
+			}
+
+			document.getElementById("loginLogin-form").onsubmit = function(e){
+				e.preventDefault();
+				let getUsername = document.getElementsByClassName("login-username")[0];
+				if(getUsername.value.length>2){
+					let getPassword = document.getElementsByClassName("login-password")[0];
+					socket.emit('LoginNow',{username: getUsername.value, password: getPassword.value});
+				}else
+					document.getElementsByClassName("LoginMessageBox")[0].innerHTML = "Username of 2 or less characters can\'t exists";
+			}
+
+			function logout(){
+				document.getElementsByClassName("login")[0].style.display="none";
+				setCookie("cookieForLogin",undefined,0);
+				location.reload();
+				loginPageSET();
+				document.getElementsByClassName("login")[0].style.display="block";
+			}
+
+			function displayClothes(n){//picekry na customizace pri kliknuti na ikonku
 				if(n!==listClothes){
 					document.getElementsByClassName("lister")[0].style.display="none";
 					document.getElementsByClassName("lister")[1].style.display="none";
@@ -288,7 +426,7 @@
 			}
 			var listClothes = -1;//referencni hodnota
 			
-			function dragElement(elmnt){//ciste zkopirovana funkce z W3schools
+			function dragElement(elmnt){//ciste zkopirovana funkce z W3schools pro dragable elementy
 				let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 				if(document.getElementsByClassName(elmnt.class + "header")[listClothes]){
 					document.getElementsByClassName(elmnt.class + "header")[listClothes].onmousedown = dragMouseDown;
@@ -344,7 +482,7 @@
 					document.getElementsByClassName("styleMeHat")[0].style.display="none";
 			}
 			var currHat = 1;
-			var hatsources = ["/public/img/cowboy_hat.png","/public/img/none.png","/public/img/cowboy_hat2.png"];
+			const hatsources = ["/public/img/cowboy_hat.png","/public/img/none.png","/public/img/cowboy_hat2.png"];
 
 			function dresschange(n){
 				currDress += n;
@@ -368,13 +506,69 @@
 					document.getElementsByClassName("styleMeDress")[0].style.display="none";
 			}
 			var currDress = 1;
-			var dresssources = ["/public/img/cowboy_guns.png","/public/img/none.png","/public/img/cowboy_scarf.png","/public/img/cowboy_scarf2.png"];
+			const dresssources = ["/public/img/cowboy_guns.png","/public/img/none.png","/public/img/cowboy_scarf.png","/public/img/cowboy_scarf2.png"];
 			
 			window.onresize = function(event){
 				ctxDisplayEverythingAtRightPosition();
 			}
+
+			function loginOrRegisterForm(login){
+				if(login){
+					document.getElementById("loginLogin-form").style.display = "block";
+					document.getElementById("loginRegister-form").style.display = "none";
+				}
+				else{
+					document.getElementById("loginLogin-form").style.display = "none";
+					document.getElementById("loginRegister-form").style.display = "block";
+				}
+			}
 		</script>
 		<script type="text/javascript" src="/public/js/game.js"></script>
+		<script >
+			socket.on('LoginMessage',function(data){
+				let colorOfMsg = "green";
+				loginOrRegisterForm(true);
+				if(!data.success){
+					colorOfMsg = "red";
+				}
+				document.getElementsByClassName("LoginMessageBox")[0].innerHTML = "<span style=\"color: "+colorOfMsg+";\">"+data.message+"</span>";
+				document.getElementsByClassName("register-username")[0].value = "";
+				document.getElementsByClassName("register-password")[0].value = "";
+				document.getElementsByClassName("register-password")[1].value = "";
+				document.getElementsByClassName("login-username")[0].value = "";
+				document.getElementsByClassName("login-password")[0].value = "";
+			});
+
+			var cookieLoginDone = true;
+			socket.on('LoginPack',function(data){
+				if(cookieLoginDone){
+					cookieLoginDone = false;
+					myDatabaseId = data.id;
+					document.getElementsByClassName("login-box")[0].style.display = "none";
+					document.getElementsByClassName("username")[0].value=data.username;
+					if(data.custom.substring(0,1)===1)
+						pickswitch();
+					let i = 0;
+					i = parseInt(data.custom.substring(1,2))-1;
+					document.getElementsByClassName("colorSO")[i].checked=true;
+					changeCalamari(i);
+					if(data.custom.substring(2,5)){
+						currHat = 1;
+						hatchange(parseInt(data.custom.substring(2,5))-1);
+					}
+					if(data.custom.substring(5,8)){
+						currDress = 1;
+						dresschange(parseInt(data.custom.substring(5,8))-1);
+					}
+					let balance = data.balance;
+					document.getElementsByClassName("balance-middle")[0].innerHTML = data.balance + "$";
+					document.getElementsByClassName("balance-middle")[0].style.display = "inline-table";
+					document.getElementsByClassName("fa-sign-out-alt")[0].style.display = "inline-table";
+					setCookie("cookieForLogin",data.cookieForLogin,1);
+					document.getElementsByClassName("login")[0].style.display="block";
+				}
+			});
+		</script>
 		<script type="text/javascript" src="/public/js/chat.js"></script>
 		<script type="text/javascript" src="/public/js/cookies.js"></script>
 	</body>
